@@ -1,0 +1,33 @@
+{
+  "name": "concreto-mente-e-tropicos",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "npx tsx scripts/fetch-github.ts",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:contrast": "tsx scripts/check-contrast.ts",
+    "check:tokens": "tsx scripts/check-tokens.ts",
+    "lint:css": "stylelint 'src/**/*.css'",
+    "lint:js": "eslint 'src/**/*.{ts,astro}'",
+    "lint": "npm run lint:css && npm run lint:js",
+    "check": "npm run check:contrast && npm run check:tokens"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/mdx": "^4.3.14",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-astro": "^1.0.0",
+    "sharp": "^0.33.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^36.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.0.0"
+  }
+}

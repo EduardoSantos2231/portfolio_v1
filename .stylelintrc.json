@@ -1,0 +1,36 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "overrides": [
+    {
+      "files": ["src/styles/tokens.css"],
+      "rules": {
+        "color-no-hex": null,
+        "no-duplicate-selectors": null,
+        "custom-property-empty-line-before": null
+      }
+    }
+  ],
+  "rules": {
+    "declaration-property-value-disallowed-list": {
+      "border-radius": ["/^[1-9]/"],
+      "box-shadow": ["/./"],
+      "backdrop-filter": ["/blur/"],
+      "transition-timing-function": ["/ease/", "/cubic-bezier/"],
+      "font-family": ["/^(sans-serif|monospace)$/"]
+    },
+    "function-disallowed-list": [
+      "linear-gradient",
+      "radial-gradient",
+      "conic-gradient",
+      "repeating-linear-gradient",
+      "repeating-radial-gradient"
+    ],
+    "color-no-hex": true,
+    "declaration-no-important": [true, { "severity": "warning" }],
+    "selector-max-id": 0,
+    "max-nesting-depth": 2,
+    "declaration-property-value-no-unknown": true,
+    "keyframes-name-pattern": "^(disjuntor|trilho|datilografica|scanner|glitch|cursor)",
+    "annotation-no-unknown": true
+  }
+}
