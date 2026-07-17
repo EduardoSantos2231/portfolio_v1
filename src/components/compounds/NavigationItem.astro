@@ -1,0 +1,117 @@
+---
+export interface Props {
+  href: string;
+  label: string;
+  active?: boolean;
+}
+
+const { href, label, active = false } = Astro.props;
+---
+
+<a
+  href={href}
+  class="nav-item"
+  data-active={active ? 'true' : undefined}
+  aria-current={active ? 'page' : undefined}
+>
+  <span class="nav-item__label">{label}</span>
+  <span class="nav-item__tape" aria-hidden="true" />
+</a>
+
+<style>
+  .nav-item {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: var(--space-gap-inline) var(--space-gap-metadata);
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-surface-container);
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-small);
+    font-weight: var(--type-weight-mono);
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: var(--type-tracking-navigation);
+    transition: background-color var(--motion-hover), color var(--motion-hover), transform var(--motion-hover);
+    flex-shrink: 0;
+    min-width: 44px;
+    min-height: 44px;
+    transform: rotate(-1deg);
+  }
+
+  .nav-item:nth-child(1) {
+    transform: rotate(-1deg);
+  }
+
+  .nav-item:nth-child(2) {
+    transform: rotate(0.8deg);
+  }
+
+  .nav-item__tape {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .nav-item:nth-child(1) .nav-item__tape {
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%) rotate(2deg);
+    width: 32px;
+    height: 10px;
+    background: var(--color-accent-stamp);
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .nav-item:nth-child(2) .nav-item__tape {
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2.5deg);
+    width: 28px;
+    height: 10px;
+    background: var(--color-accent-stamp);
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .nav-item:hover {
+    background-color: var(--color-accent-stamp);
+    color: var(--color-text-inverse);
+    transform: rotate(0deg) translate(1px, 0);
+    animation: glitch-pulse 150ms steps(1) 1;
+  }
+
+  .nav-item[data-active='true'] {
+    background-color: var(--color-surface-inverse);
+    color: var(--color-text-active);
+    border-color: var(--color-text-active);
+    transform: rotate(-0.5deg);
+  }
+
+  .nav-item:focus-visible {
+    outline: 2px solid var(--color-accent-stamp);
+    outline-offset: 2px;
+  }
+
+  .nav-item__label {
+    white-space: nowrap;
+  }
+
+  @keyframes glitch-pulse {
+    0%, 100% { transform: rotate(-1deg) translate(0, 0); }
+    20% { transform: rotate(-1deg) translate(-2px, 0); }
+    40% { transform: rotate(-1deg) translate(2px, 0); }
+    60% { transform: rotate(-1deg) translate(-1px, 1px); }
+    80% { transform: rotate(-1deg) translate(1px, -1px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-item:hover {
+      animation: none;
+    }
+  }
+</style>

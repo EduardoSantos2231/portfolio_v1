@@ -1,0 +1,30 @@
+<div class="editorial">
+  <slot />
+</div>
+
+<style>
+  .editorial {
+    max-width: 680px;
+    margin: 0 auto;
+    padding-inline: var(--space-gap-paragraph);
+    position: relative;
+  }
+
+  .editorial::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--color-border-primary);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  @media (width <= 520px) {
+    .editorial {
+      padding-inline: var(--space-gap-paragraph);
+    }
+  }
+</style>

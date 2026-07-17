@@ -1,0 +1,73 @@
+---
+import Surface from '../primitives/Surface.astro';
+import SectionTitle from '../compounds/SectionTitle.astro';
+import ContactLine from '../compounds/ContactLine.astro';
+import Text from '../primitives/Text.astro';
+
+export interface ContactItem {
+  label: string;
+  value: string;
+  href?: string;
+  i18nKey: string;
+}
+
+export interface Props {
+  contacts: ContactItem[];
+  closingQuote?: string;
+}
+
+const { contacts, closingQuote } = Astro.props;
+---
+
+<section class="contact" aria-labelledby="contact-title">
+  <Surface material="container" as="div">
+    <SectionTitle label="CONTATO" prefix="slash" i18nKey="contact.title" />
+    <div class="contact__lines">
+      {contacts.map((c) => (
+        <ContactLine label={c.label} value={c.value} href={c.href} i18nKey={c.i18nKey} />
+      ))}
+    </div>
+    {closingQuote && (
+      <div class="contact__closing">
+        <Text voice="serif" size="small" weight="italic" color="primary" as="p">
+          {closingQuote}
+        </Text>
+      </div>
+    )}
+  </Surface>
+</section>
+
+<style>
+  .contact {
+    max-width: 680px;
+    margin: 0 auto;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-margin-editorial);
+  }
+
+  .contact__lines {
+    display: flex;
+    flex-direction: column;
+    padding-block-start: var(--space-gap-section);
+  }
+
+  .contact__closing {
+    text-align: right;
+    padding-block-start: var(--space-gap-section);
+  }
+
+  .contact__closing :global(.text[data-voice='serif']) {
+    text-shadow: 0.5px 0.5px 0 var(--color-text-primary);
+    font-variant-ligatures: discretionary-ligatures;
+  }
+
+  @media (width <= 520px) {
+    .contact {
+      padding: var(--space-margin-tecnico);
+      min-height: auto;
+    }
+  }
+</style>

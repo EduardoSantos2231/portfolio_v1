@@ -1,0 +1,86 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  treatment: 'blueprint' | 'calor';
+  ratio: '1:1' | '4:3' | '3:2';
+  caption: string;
+  priority?: boolean;
+}
+
+const { src, alt, treatment, ratio, caption, priority = false } = Astro.props;
+---
+
+<figure class="image-figure" data-ratio={ratio} data-treatment={treatment}>
+  <div class="image-wrapper">
+    <img
+      src={src}
+      alt={alt}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
+      class="image"
+    />
+    <span class="image__overlay" aria-hidden="true" />
+  </div>
+  <figcaption class="image__caption">
+    {caption}
+  </figcaption>
+</figure>
+
+<style>
+  .image-figure {
+    position: relative;
+    border: var(--space-border-width) solid var(--color-border-primary);
+  }
+
+  .image-figure[data-ratio='1:1'] .image-wrapper {
+    aspect-ratio: 1 / 1;
+  }
+
+  .image-figure[data-ratio='4:3'] .image-wrapper {
+    aspect-ratio: 4 / 3;
+  }
+
+  .image-figure[data-ratio='3:2'] .image-wrapper {
+    aspect-ratio: 3 / 2;
+  }
+
+  .image-wrapper {
+    position: relative;
+  }
+
+  .image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-figure[data-treatment='blueprint'] .image {
+    filter: grayscale(1) sepia(0.3) saturate(2.5) hue-rotate(175deg) contrast(1.15) brightness(0.85);
+  }
+
+  .image-figure[data-treatment='calor'] .image {
+    filter: grayscale(0.3) sepia(0.7) saturate(2) hue-rotate(-20deg) contrast(1.2) brightness(0.9);
+  }
+
+  .image__overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+    background-color: var(--color-border-primary);
+    opacity: 0.06;
+  }
+
+  .image__caption {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-micro);
+    color: var(--color-text-secondary);
+    text-align: left;
+    padding: var(--space-gap-inline);
+    border-block-start: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-surface-container);
+  }
+</style>

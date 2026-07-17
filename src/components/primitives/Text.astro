@@ -1,0 +1,89 @@
+---
+export interface Props {
+  voice: 'grotesk' | 'serif' | 'mono' | 'body';
+  size?: 'display' | 'headline' | 'subhead' | 'lead' | 'body' | 'small' | 'micro';
+  weight?: 'regular' | 'medium' | 'bold' | 'italic' | 'semibold';
+  tracking?: 'tight' | 'normal' | 'expanded' | 'monumental';
+  leading?: 'tight' | 'normal' | 'relaxed';
+  color?: 'primary' | 'secondary' | 'active' | 'inverse';
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'figcaption' | 'time';
+  class?: string;
+}
+
+const {
+  voice,
+  size = 'body',
+  weight = 'regular',
+  tracking = 'normal',
+  leading = 'normal',
+  color = 'primary',
+  as: Tag = 'span',
+  class: className,
+} = Astro.props;
+---
+
+<Tag
+  class={['text', className].filter(Boolean).join(' ')}
+  data-voice={voice}
+  data-size={size}
+  data-weight={weight}
+  data-tracking={tracking}
+  data-leading={leading}
+  data-color={color}
+>
+  <slot />
+</Tag>
+
+<style>
+  .text {
+    font-family: var(--type-voice-serif);
+    font-size: var(--type-size-body);
+    font-weight: 400;
+    letter-spacing: var(--type-tracking-body);
+    line-height: var(--type-leading-body);
+    color: var(--color-text-primary);
+  }
+
+  .text[data-voice='grotesk'] { font-family: var(--type-voice-grotesk); }
+  .text[data-voice='serif'] { font-family: var(--type-voice-serif); }
+  .text[data-voice='mono'] { font-family: var(--type-voice-mono); }
+  .text[data-voice='body'] { font-family: var(--type-voice-body); }
+
+  .text[data-size='display'] { font-size: var(--type-size-display); }
+  .text[data-size='headline'] { font-size: var(--type-size-headline); }
+  .text[data-size='subhead'] { font-size: var(--type-size-subhead); }
+  .text[data-size='lead'] { font-size: var(--type-size-lead); }
+  .text[data-size='body'] { font-size: var(--type-size-body); }
+  .text[data-size='small'] { font-size: var(--type-size-small); }
+  .text[data-size='micro'] { font-size: var(--type-size-micro); }
+
+  .text[data-tracking='tight'] { letter-spacing: var(--type-tracking-tight); }
+  .text[data-tracking='normal'] { letter-spacing: var(--type-tracking-body); }
+  .text[data-tracking='expanded'] { letter-spacing: var(--type-tracking-expanded); }
+  .text[data-tracking='monumental'] { letter-spacing: var(--type-tracking-monumental); }
+
+  .text[data-leading='tight'] { line-height: var(--type-leading-headline); }
+  .text[data-leading='normal'] { line-height: var(--type-leading-body); }
+  .text[data-leading='relaxed'] { line-height: var(--type-leading-quote); }
+
+  .text[data-color='primary'] { color: var(--color-text-primary); }
+  .text[data-color='secondary'] { color: var(--color-text-secondary); }
+  .text[data-color='active'] { color: var(--color-text-active); }
+  .text[data-color='inverse'] { color: var(--color-text-inverse); }
+
+  .text[data-voice='grotesk'][data-weight='regular'] { font-weight: 400; }
+  .text[data-voice='grotesk'][data-weight='medium'] { font-weight: 400; letter-spacing: var(--type-tracking-tight); }
+  .text[data-voice='grotesk'][data-weight='bold'] { font-weight: 400; letter-spacing: var(--type-tracking-tight); }
+
+  .text[data-voice='serif'][data-weight='regular'] { font-weight: 400; }
+  .text[data-voice='serif'][data-weight='italic'] { font-weight: 400; font-style: italic; }
+  .text[data-voice='serif'][data-weight='bold'] { font-weight: 700; }
+
+  .text[data-voice='body'][data-weight='regular'] { font-weight: 400; }
+  .text[data-voice='body'][data-weight='semibold'] { font-weight: 600; }
+  .text[data-voice='body'][data-weight='medium'] { font-weight: 500; }
+  .text[data-voice='body'][data-weight='bold'] { font-weight: 700; }
+
+  .text[data-voice='mono'][data-weight='regular'] { font-weight: 400; }
+  .text[data-voice='mono'][data-weight='bold'] { font-weight: 700; }
+</style>

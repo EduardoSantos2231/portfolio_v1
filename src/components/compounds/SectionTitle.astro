@@ -1,0 +1,90 @@
+---
+export interface Props {
+  label: string;
+  prefix?: 'slash' | 'none';
+  i18nKey?: string;
+  voice?: 'grotesk' | 'serif';
+  size?: 'display' | 'headline';
+}
+
+const { label, prefix = 'slash', i18nKey, voice = 'grotesk', size = 'headline' } = Astro.props;
+---
+
+<h2 class="section-title" data-voice={voice} data-size={size}>
+  {prefix === 'slash' && <span class="section-title__slash" aria-hidden="true">// </span>}
+  <span class="section-title__label">
+    <span data-i18n={i18nKey}>{label}</span>
+  </span>
+</h2>
+
+<style>
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-gap-inline);
+    position: relative;
+    margin-bottom: var(--space-gap-section);
+    margin-left: -12px;
+    counter-increment: section-counter;
+  }
+
+  .section-title__slash {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-subhead);
+    color: var(--color-accent-stamp);
+    font-weight: var(--type-weight-mono-bold);
+    flex-shrink: 0;
+  }
+
+  .section-title__label {
+    display: inline;
+    font-family: var(--type-voice-grotesk);
+    font-size: var(--type-size-headline);
+    letter-spacing: var(--type-tracking-monumental);
+    line-height: var(--type-leading-headline);
+  }
+
+  .section-title[data-voice='serif'] .section-title__label {
+    font-family: var(--type-voice-serif);
+    font-weight: var(--type-weight-serif-bold);
+    letter-spacing: var(--type-tracking-tight);
+  }
+
+  .section-title[data-size='display'] .section-title__label {
+    font-size: var(--type-size-display);
+  }
+
+  .section-title::before {
+    content: '0' counter(section-counter);
+    position: absolute;
+    left: -80px;
+    top: -30px;
+    font-family: var(--type-voice-grotesk);
+    font-size: var(--type-size-headline);
+    font-weight: 400;
+    color: var(--color-accent-stamp);
+    opacity: 0.2;
+    line-height: 1;
+    letter-spacing: var(--type-tracking-monumental);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .section-title[data-size='display']::before {
+    font-size: var(--type-size-display);
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -12px;
+    width: 40px;
+    height: 14px;
+    background: var(--color-accent-stamp);
+    opacity: 0.45;
+    transform: rotate(2deg);
+    z-index: 2;
+    pointer-events: none;
+  }
+</style>

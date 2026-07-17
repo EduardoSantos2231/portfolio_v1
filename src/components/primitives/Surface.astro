@@ -1,0 +1,67 @@
+---
+export interface Props {
+  material: 'page' | 'container' | 'inverse';
+  as?: 'div' | 'section' | 'article';
+  class?: string;
+}
+
+const {
+  material,
+  as: Tag = 'div',
+  class: className,
+} = Astro.props;
+---
+
+<Tag
+  class={['surface', `surface--${material}`, className].filter(Boolean).join(' ')}
+>
+  <slot />
+  {material === 'container' && <span class="surface__tape-tl" aria-hidden="true" />}
+  {material === 'container' && <span class="surface__tape-br" aria-hidden="true" />}
+</Tag>
+
+<style>
+  .surface--page {
+  }
+
+  .surface--container {
+    position: relative;
+    background-color: var(--color-surface-container);
+    border: var(--space-border-width) solid var(--color-border-primary);
+  }
+
+  .surface--inverse {
+    background-color: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  .surface__tape-tl,
+  .surface__tape-br {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    background: var(--color-accent-stamp);
+    opacity: 0.45;
+  }
+
+  .surface__tape-tl {
+    top: -10px;
+    left: 14px;
+    width: 48px;
+    height: 16px;
+    transform: rotate(-4deg);
+  }
+
+  .surface__tape-br {
+    bottom: -10px;
+    right: 14px;
+    width: 42px;
+    height: 16px;
+    transform: rotate(3deg);
+  }
+
+  .surface--container:focus-visible {
+    outline: 2px solid var(--color-accent-active);
+    outline-offset: 2px;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import PortfolioLayout from '../components/layout/PortfolioLayout.astro';
+import InfoSection from '../components/sections/InfoSection.astro';
+import ProjectsSection from '../components/sections/ProjectsSection.astro';
+import ResidualSpace from '../components/sections/ResidualSpace.astro';
+import { aboutData } from '../data/about';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+interface ProjectDisplay {
+  id: string;
+  title: string;
+  date: string;
+  technologies: string[];
+  description?: string;
+  image: { src: string; alt: string };
+  order: number;
+}
+const sortedProjects: ProjectDisplay[] = projects
+  .map((p: { data: ProjectDisplay; id: string }) => ({ ...p.data, id: p.id }))
+  .sort((a: ProjectDisplay, b: ProjectDisplay) => a.order - b.order);
+
+const navLinks = [
+  { href: '/#info', label: 'INFO' },
+  { href: '/#projetos', label: 'PROJETOS' },
+];
+
+const footerMeta = {
+  portfolioName: 'Eduardo Nascimento',
+  date: '07/2026',
+  version: '1.0',
+};
+---
+
+<PortfolioLayout navLinks={navLinks} footerMeta={footerMeta}>
+  <InfoSection
+    fields={[
+      { label: 'NOME', value: aboutData.fields.find((f: { label: string }) => f.label === 'NOME')?.value || '[aguardando dados]', i18nKey: 'about.nome' },
+      { label: 'FORMACAO', value: aboutData.fields.find((f: { label: string }) => f.label === 'FORMACAO')?.value || '[aguardando dados]', i18nKey: 'about.formacao' },
+      { label: 'AREA', value: aboutData.fields.find((f: { label: string }) => f.label === 'AREA')?.value || '', i18nKey: 'about.area' },
+      { label: 'LOCALIZACAO', value: aboutData.fields.find((f: { label: string }) => f.label === 'LOCALIZACAO')?.value || '', i18nKey: 'about.localizacao' },
+      { label: 'LINGUAGENS', value: aboutData.fields.find((f: { label: string }) => f.label === 'LINGUAGENS')?.value || '', i18nKey: 'about.linguagens' },
+    ]}
+    contacts={[
+      { label: 'EMAIL', value: 'eduardonascimento@gmail.com', href: 'mailto:eduardonascimento@gmail.com', i18nKey: 'contact.email' },
+      { label: 'GITHUB', value: 'github.com/EduardoSantos2231', href: 'https://github.com/EduardoSantos2231', i18nKey: 'contact.github' },
+      { label: 'LINKEDIN', value: 'linkedin.com/in/edusn', href: 'https://www.linkedin.com/in/edusn/', i18nKey: 'contact.linkedin' },
+      { label: 'LOCALIZACAO', value: 'Salvador, BA', i18nKey: 'contact.localizacao' },
+    ]}
+  />
+
+  <ResidualSpace />
+
+  <section id="projetos">
+    <ProjectsSection
+      title="PROJETOS"
+      totalProjects={sortedProjects.length}
+      dateRange="2022-2026"
+      lastUpdated="07/2026"
+      projects={sortedProjects}
+    />
+  </section>
+</PortfolioLayout>

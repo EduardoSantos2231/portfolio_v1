@@ -1,0 +1,119 @@
+---
+import TechnicalMark from '../primitives/TechnicalMark.astro';
+import Text from '../primitives/Text.astro';
+
+export interface Props {
+  label: string;
+  value: string;
+  href?: string;
+  i18nKey?: string;
+}
+
+const { label, value, href, i18nKey } = Astro.props;
+---
+---
+<div class="contact-line">
+  <TechnicalMark symbol="cross-reference" size="small" color="secondary" />
+  <span class="metadata-line">
+    <Text voice="mono" size="small" color="secondary" as="span">
+      <span data-i18n={i18nKey}>{label}</span>
+    </Text>
+    <span class="metadata-sep" aria-hidden="true">{'\u00B7'}</span>
+    <Text voice="mono" size="small" color="primary" as="span">{value}</Text>
+  </span>
+  {href && (
+    <a href={href} target="_blank" rel="noopener noreferrer" class="contact-line__link">
+      <span class="contact-line__link-arrow" aria-hidden="true">{'->'}</span>
+      <span class="sr-only">Abrir link externo</span>
+    </a>
+  )}
+</div>
+
+<style>
+  .contact-line {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-gap-metadata);
+    padding-block: var(--space-gap-inline);
+    padding-inline: var(--space-gap-inline);
+    transform: rotate(0.15deg);
+    position: relative;
+  }
+
+  .contact-line:nth-child(2n) {
+    transform: rotate(-0.2deg);
+  }
+
+  .contact-line:nth-child(even) {
+    background-color: var(--color-surface-page);
+  }
+
+  .contact-line:nth-child(odd) {
+    background-color: transparent;
+  }
+
+  .contact-line:first-child::after,
+  .contact-line:last-child::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    width: 28px;
+    height: 10px;
+    background: var(--color-accent-stamp);
+    opacity: 0.45;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .contact-line:first-child::after {
+    left: 10px;
+    transform: rotate(-2deg);
+  }
+
+  .contact-line:last-child::after {
+    right: 16px;
+    transform: rotate(2.5deg);
+  }
+
+  .metadata-line {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-gap-inline);
+    flex: 1;
+  }
+
+  .metadata-sep {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-small);
+    color: var(--color-text-secondary);
+  }
+
+  .contact-line__link {
+    text-decoration: none;
+    color: var(--color-accent-active);
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-small);
+    transition: transform var(--motion-hover);
+  }
+
+  .contact-line__link:hover {
+    transform: translate(2px, 0);
+  }
+
+  .contact-line__link-arrow {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-small);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

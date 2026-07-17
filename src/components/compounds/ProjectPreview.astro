@@ -1,0 +1,142 @@
+---
+import ProjectImage from './ProjectImage.astro';
+import Text from '../primitives/Text.astro';
+
+export interface ProjectData {
+  id: string;
+  title: string;
+  date: string;
+  technologies: string[];
+  description?: string;
+  image: { src: string; alt: string };
+}
+
+export interface Props {
+  project: ProjectData;
+  isExpanded?: boolean;
+}
+
+const { project, isExpanded = false } = Astro.props;
+---
+
+<li class={['project-preview', isExpanded ? 'project-preview--expanded' : ''].join(' ')}>
+  <span class="project-preview__tape" aria-hidden="true" />
+
+  <ProjectImage
+    src={project.image.src}
+    alt={project.image.alt}
+    caption={project.image.alt}
+  />
+
+  <div class="project-preview__meta">
+    <Text voice="grotesk" size="subhead" weight="medium" color="primary" as="h3">
+      {project.title}
+    </Text>
+
+    <div class="project-preview__details">
+      <Text voice="mono" size="small" color="secondary" as="span">
+        {project.date}
+      </Text>
+      <span class="sep">{'\u00B7'}</span>
+      <Text voice="mono" size="small" color="secondary" as="span">
+        {project.technologies.join(' \u00B7 ')}
+      </Text>
+    </div>
+
+    {project.description && (
+      <Text voice="serif" size="small" weight="italic" color="primary" as="p">
+        {project.description}
+      </Text>
+    )}
+  </div>
+</li>
+
+<style>
+  .project-preview {
+    position: relative;
+    padding: var(--space-gap-paragraph);
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-surface-page);
+    list-style: none;
+    z-index: 0;
+    transform: rotate(-0.3deg);
+  }
+
+  .project-preview:nth-child(3n) {
+    transform: rotate(0.4deg);
+  }
+
+  .project-preview:nth-child(5n) {
+    transform: rotate(-0.5deg);
+    z-index: 1;
+  }
+
+  .project-preview:hover {
+    z-index: 2;
+    transform: rotate(0deg) !important;
+    animation: glitch-border 150ms steps(1) 1;
+  }
+
+  .project-preview__tape {
+    position: absolute;
+    top: -8px;
+    left: 14px;
+    width: 36px;
+    height: 14px;
+    background: rgba(123, 201, 66, 0.2);
+    z-index: 2;
+    transform: rotate(-2deg);
+    pointer-events: none;
+  }
+
+  .project-preview:nth-child(2n) .project-preview__tape {
+    left: auto;
+    right: 18px;
+    background: rgba(230, 57, 70, 0.18);
+    transform: rotate(3deg);
+  }
+
+  .project-preview__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-gap-inline);
+    padding-block-start: var(--space-gap-metadata);
+  }
+
+  .project-preview__details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-gap-inline);
+  }
+
+  .sep {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-small);
+    color: var(--color-text-secondary);
+  }
+
+  .project-preview--expanded {
+    grid-row: span 2;
+  }
+
+  @keyframes glitch-border {
+    0%, 100% { transform: rotate(0deg) translate(0, 0); }
+    15% { transform: rotate(0deg) translate(2px, 0); }
+    35% { transform: rotate(0deg) translate(-2px, 0); }
+    55% { transform: rotate(0deg) translate(-1px, 1px); }
+    75% { transform: rotate(0deg) translate(1px, -1px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-preview:hover {
+      animation: none;
+    }
+  }
+
+  @media (width <= 520px) {
+    .project-preview {
+      padding: var(--space-gap-paragraph);
+      min-width: 0;
+    }
+  }
+</style>

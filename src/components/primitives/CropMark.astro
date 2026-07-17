@@ -1,0 +1,50 @@
+---
+export interface Props {
+  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+}
+
+const { position } = Astro.props;
+---
+
+<span class="crop" data-position={position} aria-hidden="true" />
+
+<style>
+  .crop {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--color-border-primary);
+    border-style: solid;
+    border-width: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .crop[data-position='top-left'] {
+    top: 0;
+    left: 0;
+    border-top-width: var(--space-border-width);
+    border-left-width: var(--space-border-width);
+  }
+
+  .crop[data-position='top-right'] {
+    top: 0;
+    right: 0;
+    border-top-width: var(--space-border-width);
+    border-right-width: var(--space-border-width);
+  }
+
+  .crop[data-position='bottom-left'] {
+    bottom: 0;
+    left: 0;
+    border-bottom-width: var(--space-border-width);
+    border-left-width: var(--space-border-width);
+  }
+
+  .crop[data-position='bottom-right'] {
+    bottom: 0;
+    right: 0;
+    border-bottom-width: var(--space-border-width);
+    border-right-width: var(--space-border-width);
+  }
+</style>

@@ -1,0 +1,61 @@
+---
+import Image from '../primitives/Image.astro';
+import CropMark from '../primitives/CropMark.astro';
+
+export interface Props {
+  src: string;
+  alt: string;
+  caption: string;
+  priority?: boolean;
+}
+
+const { src, alt, caption, priority = false } = Astro.props;
+---
+
+<figure class="project-image-figure">
+  <div class="project-image-wrapper">
+    <span class="project-image__tape" aria-hidden="true" />
+    <CropMark position="top-left" />
+    <CropMark position="top-right" />
+    <CropMark position="bottom-left" />
+    <CropMark position="bottom-right" />
+    <Image
+      src={src}
+      alt={alt}
+      treatment="blueprint"
+      ratio="1:1"
+      caption={caption}
+      priority={priority}
+    />
+  </div>
+</figure>
+
+<style>
+  .project-image-figure {
+    position: relative;
+  }
+
+  .project-image-wrapper {
+    position: relative;
+    padding: var(--space-gap-inline);
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-surface-container);
+    transform: rotate(0.3deg);
+  }
+
+  .project-image-wrapper:nth-child(even) {
+    transform: rotate(-0.4deg);
+  }
+
+  .project-image__tape {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    width: 42px;
+    height: 16px;
+    background: rgba(230, 57, 70, 0.22);
+    z-index: 4;
+    transform: rotate(-4deg);
+    pointer-events: none;
+  }
+</style>

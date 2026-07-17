@@ -1,0 +1,50 @@
+---
+import crossReference from '../../icons/cross-reference.svg?raw';
+
+export interface Props {
+  symbol: 'cross-reference';
+  size?: 'small' | 'normal';
+  color?: 'secondary' | 'primary' | 'active';
+}
+
+const icons: Record<Props['symbol'], string> = {
+  'cross-reference': crossReference,
+};
+
+const { symbol, size = 'normal', color = 'secondary' } = Astro.props;
+
+const svgContent = icons[symbol];
+const sizeVar = size === 'small' ? 'var(--type-size-micro)' : 'var(--type-size-small)';
+const svgMarkup = svgContent.replace(/<svg/, `<svg class="tech-mark"`).replace(/currentColor/, 'var(--mark-color)');
+---
+
+<span
+  class="tech-mark-wrapper"
+  data-color={color}
+  style={`--mark-color: var(--color-accent-annotation); --mark-size: ${sizeVar}`}
+  set:html={svgMarkup}
+/>
+
+<style>
+  .tech-mark-wrapper {
+    display: inline-flex;
+    align-items: center;
+    width: var(--mark-size);
+    height: var(--mark-size);
+    flex-shrink: 0;
+  }
+
+  .tech-mark-wrapper[data-color='primary'] {
+    --mark-color: var(--color-text-primary);
+  }
+
+  .tech-mark-wrapper[data-color='active'] {
+    --mark-color: var(--color-text-active);
+  }
+
+  .tech-mark-wrapper :global(.tech-mark) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

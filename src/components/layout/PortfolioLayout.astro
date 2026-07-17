@@ -1,0 +1,334 @@
+---
+import '../../styles/tokens.css';
+import '../../styles/reset.css';
+import '../../styles/fonts.css';
+import '../../styles/layout.css';
+import NavigationItem from '../compounds/NavigationItem.astro';
+import LangToggle from '../compounds/LangToggle.astro';
+import ThemeToggle from '../compounds/ThemeToggle.astro';
+import MobileNav from './MobileNav.astro';
+
+interface NavLink {
+  href: string;
+  label: string;
+}
+
+interface FooterMeta {
+  portfolioName: string;
+  date: string;
+  version: string;
+}
+
+interface Props {
+  navLinks: NavLink[];
+  footerMeta: FooterMeta;
+}
+
+const { navLinks, footerMeta } = Astro.props;
+---
+
+<html lang="pt-BR" data-lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{footerMeta.portfolioName}</title>
+    <link
+      rel="preload"
+      href="/fonts/bebas-neue-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
+  <body>
+    <div class="grid-overlay" aria-hidden="true" />
+    <nav class="nav" aria-label="Navegacao principal">
+      <div class="nav__progress" aria-hidden="true">
+        <div class="nav__progress-fill" />
+      </div>
+      <div class="nav__items">
+        {navLinks.map((link) => (
+          <NavigationItem href={link.href} label={link.label} />
+        ))}
+      </div>
+      <div class="nav__lang">
+        <LangToggle />
+      </div>
+    </nav>
+
+    <MobileNav navLinks={navLinks} />
+
+    <main id="main-content" class="main-content">
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <span class="footer__nav">INFO · PROJETOS</span>
+      <span class="footer__meta">Eduardo Nascimento · {footerMeta.date} · v{footerMeta.version}</span>
+    </footer>
+
+    <ThemeToggle />
+  </body>
+</html>
+
+<script>
+  function applyTranslations() {
+    const html = document.documentElement;
+    const lang = html.getAttribute('data-lang') || 'pt';
+    const isEn = lang === 'en';
+
+    const map: Record<string, string> = isEn ? {
+      'nav.info': 'INFO',
+      'nav.projetos': 'WORK',
+      'info.title': 'INFO',
+      'about.cardLabel': 'DATASHEET',
+      'about.nome': 'NAME',
+      'about.formacao': 'EDUCATION',
+      'about.area': 'FIELD',
+      'about.localizacao': 'LOCATION',
+      'about.linguagens': 'LANGUAGES',
+      'projects.title': 'WORK',
+      'projects.updated': 'UPDATED',
+      'contact.cardLabel': 'CONTACT',
+      'contact.email': 'EMAIL',
+      'contact.github': 'GITHUB',
+      'contact.linkedin': 'LINKEDIN',
+      'contact.localizacao': 'LOCATION',
+      'footer.version': 'VERSION',
+    } : {
+      'nav.info': 'INFO',
+      'nav.projetos': 'PROJETOS',
+      'info.title': 'INFO',
+      'about.cardLabel': 'FICHA TECNICA',
+      'about.nome': 'NOME',
+      'about.formacao': 'FORMACAO',
+      'about.area': 'AREA',
+      'about.localizacao': 'LOCALIZACAO',
+      'about.linguagens': 'LINGUAGENS',
+      'projects.title': 'PROJETOS',
+      'projects.updated': 'ATUALIZADO EM',
+      'contact.cardLabel': 'CONTATO',
+      'contact.email': 'EMAIL',
+      'contact.github': 'GITHUB',
+      'contact.linkedin': 'LINKEDIN',
+      'contact.localizacao': 'LOCALIZACAO',
+      'footer.version': 'VERSAO',
+    };
+
+    for (const el of document.querySelectorAll<HTMLElement>('[data-i18n]')) {
+      const key = el.dataset.i18n;
+      if (key && map[key]) {
+        el.textContent = map[key];
+      }
+    }
+
+    const totalEl = document.getElementById('projects-total');
+    if (totalEl) {
+      const count = totalEl.dataset.count || '0';
+      const label = isEn ? 'REGISTERED PROJECTS' : 'PROJETOS REGISTRADOS';
+      totalEl.textContent = `${count} ${label}`;
+    }
+
+    const updatedEl = document.getElementById('projects-updated');
+    if (updatedEl) {
+      const date = updatedEl.dataset.date || '';
+      const prefix = isEn ? 'UPDATED' : 'ATUALIZADO EM';
+      updatedEl.textContent = `${prefix} ${date}`;
+    }
+  }
+
+  function setupScrollSpy() {
+    const links = document.querySelectorAll<HTMLAnchorElement>('.nav-item');
+    const progressFill = document.querySelector<HTMLElement>('.nav__progress-fill');
+
+    const sections = [
+      document.getElementById('info'),
+      document.getElementById('projetos'),
+    ].filter(Boolean) as HTMLElement[];
+
+    function updateActive() {
+      const threshold = window.scrollY + window.innerHeight * 0.4;
+      let activeHref = '#info';
+      const scrollBottom = window.scrollY + window.innerHeight;
+      const docBottom = document.body.scrollHeight - 40;
+
+      if (scrollBottom >= docBottom) {
+        activeHref = '/#projetos';
+      } else {
+        for (let i = 0; i < sections.length; i++) {
+          const target = sections[i];
+          if (!target) continue;
+          if (target.getBoundingClientRect().top + window.scrollY <= threshold) {
+            activeHref = '/#' + target.id;
+          }
+        }
+      }
+
+      for (const link of links) {
+        const isActive = link.getAttribute('href') === activeHref;
+        link.dataset.active = isActive ? 'true' : 'false';
+      }
+
+      if (progressFill) {
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const scrollY = window.scrollY;
+        const pct = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
+        progressFill.style.transform = `scaleX(${pct})`;
+      }
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  }
+
+  function observeLangChange() {
+    const observer = new MutationObserver(() => {
+      applyTranslations();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-lang'] });
+    applyTranslations();
+  }
+
+  setupScrollSpy();
+  observeLangChange();
+</script>
+
+<style>
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.25;
+    background-image:
+      linear-gradient(
+        0deg,
+        transparent 95px,
+        var(--color-border-primary) 95px,
+        var(--color-border-primary) 96px
+      ),
+      linear-gradient(
+        90deg,
+        transparent 95px,
+        var(--color-border-primary) 95px,
+        var(--color-border-primary) 96px
+      );
+    background-size: 96px 96px;
+  }
+
+  body {
+    position: relative;
+    background-color: var(--color-surface-page);
+    counter-reset: section-counter;
+  }
+
+  .main-content {
+    position: relative;
+    z-index: 1;
+    padding-block-start: 56px;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    background-color: var(--color-surface-page);
+    border-bottom: var(--space-border-width) solid var(--color-border-primary);
+  }
+
+  .nav__items {
+    display: flex;
+    gap: var(--space-gap-inline);
+    padding: var(--space-gap-inline) var(--space-gap-paragraph);
+    padding-right: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nav__lang {
+    display: flex;
+    align-items: center;
+    padding: var(--space-gap-inline) var(--space-gap-paragraph);
+    padding-left: 0;
+    margin-left: auto;
+  }
+
+  .nav__items::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (width <= 900px) {
+    .nav__items {
+      display: none;
+    }
+
+    .nav__lang {
+      position: fixed;
+      top: var(--space-gap-paragraph);
+      right: var(--space-gap-paragraph);
+      z-index: 11;
+      padding: 0;
+    }
+  }
+
+  @media (width > 900px) {
+    .nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 4px,
+        var(--color-border-primary) 4px,
+        var(--color-border-primary) 5px
+      );
+    }
+  }
+
+  .nav__progress {
+    position: absolute;
+    bottom: calc(-1 * var(--space-border-width));
+    left: 0;
+    right: 0;
+    height: var(--space-border-width);
+    background-color: var(--color-border-primary);
+  }
+
+  .nav__progress-fill {
+    height: 100%;
+    background-color: var(--color-accent-stamp);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .footer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: var(--space-gap-paragraph) var(--space-margin-editorial);
+    border-top: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-surface-page);
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-micro);
+    color: var(--color-text-secondary);
+    letter-spacing: var(--type-tracking-navigation);
+  }
+
+  .footer__nav {
+    opacity: 0.6;
+  }
+
+  .footer__meta {
+    opacity: 0.6;
+  }
+</style>
