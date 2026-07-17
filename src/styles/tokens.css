@@ -1,0 +1,267 @@
+/* ===================================================================
+ * CONCRETO, MENTE E TROPICOS
+ * tokens.css — Design tokens (4 camadas)
+ *
+ * Design System: Editorial Brutalist Collage
+ * Fonte: Stitch project "porfolio" + design docs
+ * =================================================================== */
+
+/* ===================================================================
+ * CAMADA 0 · FOUNDATION
+ * =================================================================== */
+
+:root {
+  /* --- Cores ---
+   * Paleta editorial: papel envelhecido, tinta preta, carimbo vermelho.
+   * Stitch palette + design docs chromatic atmosphere. */
+
+  --foundation-color-paper: #F4F1EA;
+  --foundation-color-paper-muted: #E9E4DA;
+  --foundation-color-ink: #1A1A1A;
+  --foundation-color-ink-muted: #666;
+  --foundation-color-stamp-red: #E63946;
+  --foundation-color-dark-paper: #0D0D0D;
+  --foundation-color-dark-ink: #EDEDED;
+  --foundation-color-dark-ink-muted: #AAA;
+  --foundation-color-highlighter: #FFEE58;
+  --foundation-color-terminal-green: #7BC942;
+
+  /* --- Espacamento --- */
+
+  --foundation-space-0: 0px;
+  --foundation-space-1: 4px;
+  --foundation-space-2: 8px;
+  --foundation-space-3: 16px;
+  --foundation-space-4: 24px;
+  --foundation-space-5: 40px;
+  --foundation-space-6: 64px;
+  --foundation-space-7: 120px;
+
+  /* --- Tipografia — familias ---
+   * Bebas Neue: headlines. Condensada, 400 weight apenas.
+   * Playfair Display: corpo editorial. Serif com italico verdadeiro.
+   * Work Sans: corpo funcional. Alta legibilidade.
+   * Space Mono: metadados. Tecnica, precisa, monoespaçada. */
+
+  --foundation-font-grotesk: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --foundation-font-serif: 'Playfair Display', 'Georgia', serif;
+  --foundation-font-body: 'Work Sans', 'Helvetica Neue', sans-serif;
+  --foundation-font-mono: 'Space Mono', 'Courier New', monospace;
+
+  /* --- Tipografia — pesos --- */
+
+  --foundation-weight-grotesk-regular: 400;
+  --foundation-weight-body-regular: 400;
+  --foundation-weight-body-semibold: 600;
+  --foundation-weight-serif-regular: 400;
+  --foundation-weight-serif-italic: 400;
+  --foundation-weight-serif-bold: 700;
+  --foundation-weight-mono-regular: 400;
+  --foundation-weight-mono-bold: 700;
+
+  /* --- Tipografia — tamanhos ---
+   * display (120px): Hero nome
+   * headline (64px): Titulos de secao
+   * subhead (32px): Sub-secoes
+   * lead (24px): Lead text
+   * body (18px): Corpo
+   * small (14px): Navegacao, labels
+   * micro (12px): Metadados, legendas */
+
+  --foundation-font-size-display: 7.5rem;
+  --foundation-font-size-headline: 4rem;
+  --foundation-font-size-subhead: 2rem;
+  --foundation-font-size-lead: 1.5rem;
+  --foundation-font-size-body: 1.125rem;
+  --foundation-font-size-small: 0.875rem;
+  --foundation-font-size-micro: 0.75rem;
+
+  /* --- Tipografia — alturas de linha --- */
+
+  --foundation-line-height-tight: 0.83;
+  --foundation-line-height-headline: 0.94;
+  --foundation-line-height-subhead: 1.0;
+  --foundation-line-height-body: 1.33;
+  --foundation-line-height-normal: 1.33;
+  --foundation-line-height-relaxed: 1.43;
+
+  /* --- Tipografia — tracking --- */
+
+  --foundation-tracking-tight: -0.03em;
+  --foundation-tracking-normal: 0;
+  --foundation-tracking-expanded: 0.06em;
+  --foundation-tracking-monumental: 0.08em;
+
+  /* --- Movimento — duracoes --- */
+
+  --foundation-duration-snap: 0ms;
+  --foundation-duration-glitch: 150ms;
+  --foundation-duration-typewriter: 50ms;
+  --foundation-duration-slide: 300ms;
+  --foundation-duration-scanner: 800ms;
+
+  /* --- Breakpoints --- */
+
+  --foundation-bp-compact: 520px;
+  --foundation-bp-medium: 900px;
+  --foundation-bp-wide: 1200px;
+}
+
+/* ===================================================================
+ * CAMADA 1 · SEMANTIC
+ * =================================================================== */
+
+:root {
+  /* --- Superficies --- */
+
+  --color-surface-page: var(--foundation-color-paper);
+  --color-surface-container: var(--foundation-color-paper-muted);
+  --color-surface-inverse: var(--foundation-color-ink);
+  --color-grid-line: var(--foundation-color-ink);
+  --color-border-primary: var(--foundation-color-ink);
+
+  /* --- Texto --- */
+
+  --color-text-primary: var(--foundation-color-ink);
+  --color-text-secondary: var(--foundation-color-ink-muted);
+  --color-text-active: var(--foundation-color-terminal-green);
+  --color-text-inverse: var(--foundation-color-paper);
+  --color-text-accent: var(--foundation-color-stamp-red);
+
+  /* --- Acentos --- */
+
+  --color-accent-annotation: var(--foundation-color-ink);
+  --color-accent-stamp: var(--foundation-color-stamp-red);
+  --color-accent-active: var(--foundation-color-terminal-green);
+
+  /* --- Tipografia semantica --- */
+
+  --type-voice-grotesk: var(--foundation-font-grotesk);
+  --type-voice-serif: var(--foundation-font-serif);
+  --type-voice-body: var(--foundation-font-body);
+  --type-voice-mono: var(--foundation-font-mono);
+
+  --type-size-display: var(--foundation-font-size-display);
+  --type-size-headline: var(--foundation-font-size-headline);
+  --type-size-subhead: var(--foundation-font-size-subhead);
+  --type-size-lead: var(--foundation-font-size-lead);
+  --type-size-body: var(--foundation-font-size-body);
+  --type-size-small: var(--foundation-font-size-small);
+  --type-size-micro: var(--foundation-font-size-micro);
+
+  --type-weight-headline: var(--foundation-weight-grotesk-regular);
+  --type-weight-body: var(--foundation-weight-body-regular);
+  --type-weight-body-semibold: var(--foundation-weight-body-semibold);
+  --type-weight-serif: var(--foundation-weight-serif-regular);
+  --type-weight-serif-italic: var(--foundation-weight-serif-italic);
+  --type-weight-serif-bold: var(--foundation-weight-serif-bold);
+  --type-weight-mono: var(--foundation-weight-mono-regular);
+  --type-weight-mono-bold: var(--foundation-weight-mono-bold);
+
+  --type-leading-headline: var(--foundation-line-height-tight);
+  --type-leading-subhead: var(--foundation-line-height-subhead);
+  --type-leading-body: var(--foundation-line-height-normal);
+  --type-leading-lead: var(--foundation-line-height-body);
+  --type-leading-quote: var(--foundation-line-height-relaxed);
+  --type-leading-relaxed: var(--foundation-line-height-relaxed);
+
+  --type-tracking-tight: var(--foundation-tracking-tight);
+  --type-tracking-normal: var(--foundation-tracking-normal);
+  --type-tracking-body: var(--foundation-tracking-normal);
+  --type-tracking-expanded: var(--foundation-tracking-expanded);
+  --type-tracking-monumental: var(--foundation-tracking-monumental);
+  --type-tracking-navigation: var(--foundation-tracking-expanded);
+
+  /* --- Espacamento semantico --- */
+
+  --space-margin-editorial: var(--foundation-space-5);
+  --space-margin-tecnico: var(--foundation-space-3);
+  --space-gap-section: var(--foundation-space-5);
+  --space-gap-paragraph: var(--foundation-space-3);
+  --space-gap-metadata: var(--foundation-space-2);
+  --space-gap-inline: var(--foundation-space-1);
+  --space-residual-height: var(--foundation-space-7);
+  --space-border-width: 2px;
+
+  /* --- Movimento semantico --- */
+
+  --motion-expand: var(--foundation-duration-slide);
+  --motion-load: var(--foundation-duration-scanner);
+  --motion-hover: var(--foundation-duration-glitch);
+
+  /* --- Nivel de textura --- */
+
+  --texture-level: 1;
+
+  /* --- Colagem / sombra solida --- */
+
+  --space-hard-shadow-offset: 4px;
+  --space-grid-cell: var(--foundation-space-4);
+}
+
+/* ===================================================================
+ * CAMADA 2 · MODE
+ * =================================================================== */
+
+:root,
+[data-theme="light"] {
+  --color-surface-page: var(--foundation-color-paper);
+  --color-surface-container: var(--foundation-color-paper-muted);
+  --color-surface-inverse: var(--foundation-color-ink);
+  --color-text-primary: var(--foundation-color-ink);
+  --color-text-secondary: var(--foundation-color-ink-muted);
+  --color-text-active: var(--foundation-color-terminal-green);
+  --color-text-inverse: var(--foundation-color-paper);
+  --color-text-accent: var(--foundation-color-stamp-red);
+  --color-accent-annotation: var(--foundation-color-ink);
+  --color-accent-stamp: var(--foundation-color-stamp-red);
+  --color-border-primary: var(--foundation-color-ink);
+}
+
+[data-theme="dark"] {
+  --color-surface-page: var(--foundation-color-dark-paper);
+  --color-surface-container: var(--foundation-color-ink);
+  --color-surface-inverse: var(--foundation-color-paper);
+  --color-text-primary: var(--foundation-color-dark-ink);
+  --color-text-secondary: var(--foundation-color-dark-ink-muted);
+  --color-text-active: var(--foundation-color-terminal-green);
+  --color-text-inverse: var(--foundation-color-dark-paper);
+  --color-text-accent: var(--foundation-color-highlighter);
+  --color-accent-annotation: var(--foundation-color-highlighter);
+  --color-accent-stamp: var(--foundation-color-highlighter);
+  --color-border-primary: var(--foundation-color-dark-ink);
+  --color-grid-line: var(--foundation-color-dark-ink);
+}
+
+/* ===================================================================
+ * CAMADA 3 · STATE
+ * =================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-expand: 0ms;
+    --motion-load: 0ms;
+    --motion-hover: 0ms;
+  }
+}
+
+@media (prefers-contrast: high), (forced-colors: active) {
+  :root {
+    --texture-level: 0;
+  }
+}
+
+@media (prefers-reduced-data: reduce) {
+  :root {
+    --texture-level: 0;
+  }
+}
+
+@media (width <= 520px) {
+  :root {
+    --foundation-font-size-display: 3.5rem;
+    --foundation-font-size-headline: 2.5rem;
+    --foundation-font-size-subhead: 1.5rem;
+    --foundation-space-7: 64px;
+  }
+}
