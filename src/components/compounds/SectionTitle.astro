@@ -70,11 +70,16 @@ const { label, prefix = 'slash', i18nKey, voice = 'grotesk', size = 'headline' }
     font-size: var(--type-size-headline);
     font-weight: 400;
     color: var(--color-accent-stamp);
-    opacity: 0.2;
+    opacity: 0.08;
     line-height: 1;
     letter-spacing: var(--type-tracking-monumental);
     pointer-events: none;
     z-index: 0;
+    transition: opacity 200ms linear;
+  }
+
+  .section-title:hover::before {
+    opacity: 0.35;
   }
 
   .section-title[data-size='display']::before {

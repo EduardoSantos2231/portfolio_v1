@@ -124,7 +124,7 @@
 
   --color-text-primary: var(--foundation-color-ink);
   --color-text-secondary: var(--foundation-color-ink-muted);
-  --color-text-active: var(--foundation-color-terminal-green);
+  --color-text-active: var(--foundation-color-paper);
   --color-text-inverse: var(--foundation-color-paper);
   --color-text-accent: var(--foundation-color-stamp-red);
 
@@ -132,7 +132,7 @@
 
   --color-accent-annotation: var(--foundation-color-ink);
   --color-accent-stamp: var(--foundation-color-stamp-red);
-  --color-accent-active: var(--foundation-color-terminal-green);
+  --color-accent-active: var(--foundation-color-stamp-red);
 
   /* --- Tipografia semantica --- */
 
@@ -210,11 +210,12 @@
   --color-surface-inverse: var(--foundation-color-ink);
   --color-text-primary: var(--foundation-color-ink);
   --color-text-secondary: var(--foundation-color-ink-muted);
-  --color-text-active: var(--foundation-color-terminal-green);
+  --color-text-active: var(--foundation-color-paper);
   --color-text-inverse: var(--foundation-color-paper);
   --color-text-accent: var(--foundation-color-stamp-red);
   --color-accent-annotation: var(--foundation-color-ink);
   --color-accent-stamp: var(--foundation-color-stamp-red);
+  --color-accent-active: var(--foundation-color-stamp-red);
   --color-border-primary: var(--foundation-color-ink);
 }
 
@@ -224,11 +225,12 @@
   --color-surface-inverse: var(--foundation-color-paper);
   --color-text-primary: var(--foundation-color-dark-ink);
   --color-text-secondary: var(--foundation-color-dark-ink-muted);
-  --color-text-active: var(--foundation-color-terminal-green);
+  --color-text-active: var(--foundation-color-dark-paper);
   --color-text-inverse: var(--foundation-color-dark-paper);
   --color-text-accent: var(--foundation-color-highlighter);
   --color-accent-annotation: var(--foundation-color-highlighter);
   --color-accent-stamp: var(--foundation-color-highlighter);
+  --color-accent-active: var(--foundation-color-highlighter);
   --color-border-primary: var(--foundation-color-dark-ink);
   --color-grid-line: var(--foundation-color-dark-ink);
 }

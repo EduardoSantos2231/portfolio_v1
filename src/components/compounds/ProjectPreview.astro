@@ -62,6 +62,17 @@ const { project, isExpanded = false } = Astro.props;
     transform: rotate(-0.3deg);
   }
 
+  .project-preview::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 1px solid var(--color-border-primary);
+    opacity: 0.45;
+    transform: rotate(0.2deg);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .project-preview:nth-child(3n) {
     transform: rotate(0.4deg);
   }

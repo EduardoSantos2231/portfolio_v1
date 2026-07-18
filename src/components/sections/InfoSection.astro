@@ -85,10 +85,26 @@ const { fields, contacts, closingQuote } = Astro.props;
 
   <blockquote class="info__easter">
     &ldquo;Omnia aliena sunt; tempus tantum nostrum est.&rdquo;<br />
-    &mdash; Tudo &eacute; alheio; apenas o tempo &eacute; nosso.
-    <cite>S&ecirc;neca, Cartas a Luc&iacute;lio, I</cite>
+    &mdash; <span data-i18n="easter.quote">Tudo &eacute; alheio; apenas o tempo &eacute; nosso.</span>
+    <cite><span data-i18n="easter.cite">S&ecirc;neca, Cartas a Luc&iacute;lio, I</span></cite>
   </blockquote>
+
+  <div class="post-it" id="post-it" aria-hidden="true">
+    <span data-i18n="postit.quote">Per angusta ad augusta.</span>
+    <cite data-i18n="postit.cite">S&ecirc;neca</cite>
+  </div>
 </section>
+
+<script>
+  const postIt = document.getElementById('post-it');
+  if (postIt) {
+    const observer = new MutationObserver(() => {
+      postIt.hidden = document.documentElement.getAttribute('data-theme') === 'dark';
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    postIt.hidden = document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+</script>
 
 <style>
   .info {
@@ -121,10 +137,9 @@ const { fields, contacts, closingQuote } = Astro.props;
   .info__cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
+    gap: var(--space-border-width);
     min-height: 60vh;
     position: relative;
-    border: var(--space-border-width) solid var(--color-border-primary);
     transform: rotate(0.1deg);
   }
 
@@ -133,11 +148,17 @@ const { fields, contacts, closingQuote } = Astro.props;
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 50%;
-    width: var(--space-border-width);
-    background-color: var(--color-border-primary);
+    left: calc(50% + 1px);
+    width: 1px;
+    background: repeating-linear-gradient(
+      var(--color-border-primary) 0,
+      var(--color-border-primary) 6px,
+      transparent 6px,
+      transparent 10px
+    );
     z-index: 1;
     pointer-events: none;
+    opacity: 0.7;
   }
 
   .info__cards::after {
@@ -160,24 +181,23 @@ const { fields, contacts, closingQuote } = Astro.props;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    border: var(--space-border-width) solid var(--color-border-primary);
+  }
+
+  .info__card::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 1px solid var(--color-border-primary);
+    transform: rotate(0.3deg);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
   }
 
   .info__card--about {
     background-color: var(--color-surface-page);
     transform: rotate(-0.1deg);
-  }
-
-  .info__card--about::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.01;
-    background-image:
-      repeating-linear-gradient(45deg, var(--color-text-primary) 0, var(--color-text-primary) 0.5px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(-45deg, var(--color-text-primary) 0, var(--color-text-primary) 0.5px, transparent 1px, transparent 6px);
-    background-size: 8px 8px;
   }
 
   .info__card--about::after {
@@ -197,36 +217,6 @@ const { fields, contacts, closingQuote } = Astro.props;
   .info__card--contact {
     background-color: var(--color-surface-container);
     transform: rotate(0.15deg);
-  }
-
-  .info__card--contact::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.01;
-    background-image:
-      repeating-linear-gradient(45deg, var(--color-text-primary) 0, var(--color-text-primary) 0.5px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(-45deg, var(--color-text-primary) 0, var(--color-text-primary) 0.5px, transparent 1px, transparent 6px);
-    background-size: 8px 8px;
-  }
-
-  .info__card--contact::before {
-    content: 'VERIFIED';
-    position: absolute;
-    bottom: var(--space-gap-paragraph);
-    right: var(--space-gap-paragraph);
-    font-family: var(--type-voice-mono);
-    font-size: var(--type-size-micro);
-    color: var(--color-accent-stamp);
-    letter-spacing: var(--type-tracking-navigation);
-    opacity: 0.5;
-    transform: rotate(-5deg);
-    z-index: 2;
-    pointer-events: none;
-    border: 1px solid currentColor;
-    padding: 2px var(--space-gap-inline);
   }
 
   .info__card--contact::after {
@@ -296,6 +286,7 @@ const { fields, contacts, closingQuote } = Astro.props;
   }
 
   .info__easter {
+    position: relative;
     max-width: 680px;
     margin: var(--space-margin-tecnico) 0 0 auto;
     text-align: right;
@@ -305,6 +296,47 @@ const { fields, contacts, closingQuote } = Astro.props;
     color: var(--color-text-secondary);
     opacity: 0.5;
     line-height: 1.6;
+    background: linear-gradient(90deg, rgba(230, 57, 70, 0.05) 0, transparent 30px);
+  }
+
+  .info__easter::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-accent-stamp);
+    opacity: 0.3;
+  }
+
+  .info__easter::after {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 6px;
+    width: 100%;
+    height: 1px;
+    background: var(--color-accent-stamp);
+    opacity: 0.25;
+  }
+
+  .info__easter cite::after {
+    content: '\2588';
+    margin-left: 2px;
+    color: var(--color-accent-stamp);
+    opacity: 0.6;
+    animation: cursor-blink 1.2s steps(1) infinite;
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-micro);
+    font-style: normal;
+    line-height: 1;
+    vertical-align: middle;
+  }
+
+  @keyframes cursor-blink {
+    0%, 49% { opacity: 0.6; }
+    50%, 100% { opacity: 0; }
   }
 
   .info__easter cite {
@@ -369,6 +401,57 @@ const { fields, contacts, closingQuote } = Astro.props;
 
     .info__card {
       padding: var(--space-gap-paragraph);
+    }
+  }
+  .post-it {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    z-index: 2;
+    pointer-events: none;
+    width: 170px;
+    padding: var(--space-gap-paragraph) var(--space-gap-metadata);
+    background-color: rgba(244, 241, 234, 0.8);
+    border: 1px solid var(--color-border-primary);
+    opacity: 0.15;
+    transform: rotate(2.5deg);
+    font-family: var(--type-voice-serif);
+    font-size: var(--type-size-small);
+    font-style: italic;
+    color: var(--color-text-primary);
+    line-height: 1.4;
+    transition: opacity 400ms linear;
+  }
+
+  .post-it:hover {
+    opacity: 0.4;
+  }
+
+  .post-it::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 22px;
+    height: 8px;
+    background: var(--color-accent-stamp);
+    opacity: 0.35;
+    transform: translateX(-50%) rotate(-4deg);
+    pointer-events: none;
+  }
+
+  .post-it cite {
+    display: block;
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-micro);
+    font-style: normal;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-gap-inline);
+  }
+
+  @media (width <= 900px) {
+    .post-it {
+      display: none;
     }
   }
 </style>

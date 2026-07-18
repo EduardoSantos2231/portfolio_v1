@@ -103,6 +103,10 @@ const { navLinks, footerMeta } = Astro.props;
       'contact.linkedin': 'LINKEDIN',
       'contact.localizacao': 'LOCATION',
       'footer.version': 'VERSION',
+      'easter.quote': 'Everything is alien; only time is ours.',
+      'easter.cite': 'Seneca, Letters to Lucilius, I',
+      'postit.quote': 'Through narrow paths, to the heights.',
+      'postit.cite': 'Seneca',
     } : {
       'nav.info': 'INFO',
       'nav.projetos': 'PROJETOS',
@@ -121,6 +125,10 @@ const { navLinks, footerMeta } = Astro.props;
       'contact.linkedin': 'LINKEDIN',
       'contact.localizacao': 'LOCALIZACAO',
       'footer.version': 'VERSAO',
+      'easter.quote': 'Tudo é alheio; apenas o tempo é nosso.',
+      'easter.cite': 'Sêneca, Cartas a Lucílio, I',
+      'postit.quote': 'Per angusta ad augusta.',
+      'postit.cite': 'Sêneca',
     };
 
     for (const el of document.querySelectorAll<HTMLElement>('[data-i18n]')) {
@@ -182,6 +190,10 @@ const { navLinks, footerMeta } = Astro.props;
         const scrollY = window.scrollY;
         const pct = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
         progressFill.style.transform = `scaleX(${pct})`;
+        const progressBar = document.querySelector<HTMLElement>('.nav__progress');
+        if (progressBar) {
+          progressBar.dataset.complete = pct >= 0.99 ? 'true' : '';
+        }
       }
     }
 
@@ -251,6 +263,30 @@ const { navLinks, footerMeta } = Astro.props;
       linear-gradient(315deg, transparent 48%, var(--color-accent-stamp) 48%, var(--color-accent-stamp) 52%, transparent 52%) 8% 75% / 50px 50px no-repeat,
       linear-gradient(135deg, transparent 48%, var(--color-accent-stamp) 48%, var(--color-accent-stamp) 52%, transparent 52%) 60% 88% / 60px 60px no-repeat;
     transform: rotate(-8deg);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    background:
+      /* stroke 1 — thick diagonal, top-right */
+      linear-gradient(25deg, transparent 0, var(--color-accent-stamp) 0, var(--color-accent-stamp) 2px, transparent 2px) 72% 8% / 90px 10px no-repeat,
+      /* stroke 2 — thin, mid-left */
+      linear-gradient(-15deg, transparent 0, var(--color-accent-stamp) 0, var(--color-accent-stamp) 1px, transparent 1px) 12% 40% / 60px 8px no-repeat,
+      /* stroke 3 — thick, bottom-center */
+      linear-gradient(40deg, transparent 0, var(--color-accent-stamp) 0, var(--color-accent-stamp) 3px, transparent 3px) 55% 82% / 100px 12px no-repeat,
+      /* stroke 4 — thin, top-left */
+      linear-gradient(-30deg, transparent 0, var(--color-accent-stamp) 0, var(--color-accent-stamp) 1.5px, transparent 1.5px) 18% 15% / 70px 6px no-repeat,
+      /* stroke 5 — thick, mid-right */
+      linear-gradient(55deg, transparent 0, var(--color-accent-stamp) 0, var(--color-accent-stamp) 2px, transparent 2px) 88% 55% / 80px 10px no-repeat,
+      /* stroke 6 — very thin accent */
+      linear-gradient(-45deg, transparent 0, var(--color-accent-stamp) 0, var(--color-accent-stamp) 0.8px, transparent 0.8px) 40% 68% / 50px 5px no-repeat,
+      /* stroke 7 — thick bottom-left */
+      linear-gradient(10deg, transparent 0, var(--color-accent-stamp) 0, var(--color-accent-stamp) 3px, transparent 3px) 5% 90% / 110px 14px no-repeat;
   }
 
   .main-content {
@@ -324,6 +360,19 @@ const { navLinks, footerMeta } = Astro.props;
     }
   }
 
+  .footer__meta:hover::after {
+    content: '[build: 2026-07-17]';
+    position: absolute;
+    left: 0;
+    top: -16px;
+    font-family: var(--type-voice-mono);
+    font-size: 10px;
+    color: var(--color-accent-stamp);
+    white-space: nowrap;
+    opacity: 0.7;
+    letter-spacing: var(--type-tracking-navigation);
+  }
+
   .nav__progress {
     position: absolute;
     bottom: calc(-1 * var(--space-border-width));
@@ -338,6 +387,18 @@ const { navLinks, footerMeta } = Astro.props;
     background-color: var(--color-accent-stamp);
     transform-origin: left;
     transform: scaleX(0);
+  }
+
+  .nav__progress[data-complete='true']::after {
+    content: '[EOF]';
+    position: absolute;
+    right: 8px;
+    top: 4px;
+    font-family: var(--type-voice-mono);
+    font-size: 10px;
+    color: var(--color-accent-stamp);
+    opacity: 0.6;
+    letter-spacing: var(--type-tracking-navigation);
   }
 
   .footer {
@@ -355,11 +416,20 @@ const { navLinks, footerMeta } = Astro.props;
     letter-spacing: var(--type-tracking-navigation);
   }
 
-  .footer__nav {
-    opacity: 0.6;
+  .footer {
+    position: relative;
   }
 
-  .footer__meta {
-    opacity: 0.6;
+  .footer__meta:hover::after {
+    content: '[build: 2026-07-17]';
+    position: absolute;
+    left: 0;
+    top: -16px;
+    font-family: var(--type-voice-mono);
+    font-size: 10px;
+    color: var(--color-accent-stamp);
+    white-space: nowrap;
+    opacity: 0.7;
+    letter-spacing: var(--type-tracking-navigation);
   }
 </style>
