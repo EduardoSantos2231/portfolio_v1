@@ -6,5 +6,5 @@ description: "um scritp de coleta de vagas públicas"
 image:
   src: /images/project-placeholder.svg
   alt: "Gilgamesh"
-order: 2
+order: 4
 ---
