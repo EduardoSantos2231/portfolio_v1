@@ -64,19 +64,6 @@ const { project, isExpanded = false } = Astro.props;
     transition:
       transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 220ms ease;
-    /* Papel quadriculado dentro do recorte. */
-    --_g-fine: color-mix(in srgb, var(--color-grid-line) 14%, transparent);
-    --_g-bold: color-mix(in srgb, var(--color-grid-line) 26%, transparent);
-    background-image:
-      linear-gradient(to right, var(--_g-fine) 0, var(--_g-fine) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--_g-fine) 0, var(--_g-fine) 1px, transparent 1px),
-      linear-gradient(to right, var(--_g-bold) 0, var(--_g-bold) 1.5px, transparent 1.5px),
-      linear-gradient(to bottom, var(--_g-bold) 0, var(--_g-bold) 1.5px, transparent 1.5px);
-    background-size:
-      var(--graph-cell-fine, 22px) var(--graph-cell-fine, 22px),
-      var(--graph-cell-fine, 22px) var(--graph-cell-fine, 22px),
-      var(--graph-cell-bold, 110px) var(--graph-cell-bold, 110px),
-      var(--graph-cell-bold, 110px) var(--graph-cell-bold, 110px);
   }
 
   .project-preview::after {

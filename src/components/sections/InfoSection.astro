@@ -190,19 +190,8 @@ const { fields, contacts, closingQuote } = Astro.props;
     flex-direction: column;
     justify-content: flex-start;
     border: var(--space-border-width) solid var(--color-border-primary);
-    /* Papel quadriculado dentro do card (forte). */
-    --_g-fine: color-mix(in srgb, var(--color-grid-line) 18%, transparent);
-    --_g-bold: color-mix(in srgb, var(--color-grid-line) 32%, transparent);
-    background-image:
-      linear-gradient(to right, var(--_g-fine) 0, var(--_g-fine) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--_g-fine) 0, var(--_g-fine) 1px, transparent 1px),
-      linear-gradient(to right, var(--_g-bold) 0, var(--_g-bold) 1.5px, transparent 1.5px),
-      linear-gradient(to bottom, var(--_g-bold) 0, var(--_g-bold) 1.5px, transparent 1.5px);
-    background-size:
-      var(--graph-cell-fine, 22px) var(--graph-cell-fine, 22px),
-      var(--graph-cell-fine, 22px) var(--graph-cell-fine, 22px),
-      var(--graph-cell-bold, 110px) var(--graph-cell-bold, 110px),
-      var(--graph-cell-bold, 110px) var(--graph-cell-bold, 110px);
+    /* Superficie de papel liso: recorte que se destaca do fundo quadriculado. */
+    background-color: var(--color-surface-page);
   }
 
   .info__card::before {
