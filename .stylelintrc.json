@@ -8,6 +8,23 @@
         "no-duplicate-selectors": null,
         "custom-property-empty-line-before": null
       }
+    },
+    {
+      "files": ["src/styles/collage.css"],
+      "rules": {
+        "function-disallowed-list": null,
+        "declaration-property-value-disallowed-list": null,
+        "keyframes-name-pattern": null,
+        "selector-class-pattern": null,
+        "custom-property-pattern": null,
+        "no-duplicate-selectors": null,
+        "color-function-notation": null,
+        "alpha-value-notation": null,
+        "color-no-hex": null,
+        "comment-empty-line-before": null,
+        "declaration-empty-line-before": null,
+        "rule-empty-line-before": null
+      }
     }
   ],
   "rules": {

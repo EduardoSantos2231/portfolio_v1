@@ -40,49 +40,20 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+
+  --graph-fine: color-mix(in srgb, var(--color-grid-line) calc(var(--graph-line-opacity) * 100%), transparent);
+  --graph-bold: color-mix(in srgb, var(--color-grid-line) calc(var(--graph-bold-opacity) * 100%), transparent);
   background-image:
-    linear-gradient(
-      to right,
-      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 0,
-      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 0,
-      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to right,
-      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 0,
-      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 1.5px,
-      transparent 1.5px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 0,
-      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 1.5px,
-      transparent 1.5px
-    );
+    linear-gradient(to right, var(--graph-fine) 0, var(--graph-fine) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--graph-fine) 0, var(--graph-fine) 1px, transparent 1px),
+    linear-gradient(to right, var(--graph-bold) 0, var(--graph-bold) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, var(--graph-bold) 0, var(--graph-bold) 1.5px, transparent 1.5px);
   background-size:
     var(--graph-cell-fine) var(--graph-cell-fine),
     var(--graph-cell-fine) var(--graph-cell-fine),
     var(--graph-cell-bold) var(--graph-cell-bold),
     var(--graph-cell-bold) var(--graph-cell-bold);
   opacity: 1;
-  /* A opacidade real vem das cores; usamos mask leve nas bordas. */
-}
-
-/* Aplica as opacidades por camada via cores translucidas. */
-.graph-paper::before {
-  --_fine: color-mix(in srgb, var(--color-grid-line) calc(var(--graph-line-opacity) * 100%), transparent);
-  --_bold: color-mix(in srgb, var(--color-grid-line) calc(var(--graph-bold-opacity) * 100%), transparent);
-  background-image:
-    linear-gradient(to right, var(--_fine) 0, var(--_fine) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--_fine) 0, var(--_fine) 1px, transparent 1px),
-    linear-gradient(to right, var(--_bold) 0, var(--_bold) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, var(--_bold) 0, var(--_bold) 1.5px, transparent 1.5px);
 }
 
 /* Garante que o conteudo do card fique acima da grade. */
@@ -153,39 +124,6 @@
   transform: translateY(28px) rotate(calc(var(--settle-rotate) - 4deg)) scale(0.965);
   transform-origin: var(--reveal-origin, 50% 0%);
   will-change: transform, opacity;
-}
-
-.reveal.is-pasted {
-  animation: paste-in 620ms cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
-}
-
-/* Estado final estatico — libera o hover para sobrescrever o transform. */
-.reveal.is-settled {
-  opacity: 1;
-  animation: none;
-  transform: translateY(0) rotate(var(--settle-rotate)) scale(1);
-}
-
-@keyframes paste-in {
-  0% {
-    opacity: 0;
-    transform: translateY(28px) rotate(calc(var(--settle-rotate) - 4deg)) scale(0.965);
-  }
-  55% {
-    opacity: 1;
-    transform: translateY(-4px) rotate(calc(var(--settle-rotate) + 1.4deg)) scale(1.012);
-  }
-  78% {
-    transform: translateY(1px) rotate(calc(var(--settle-rotate) - 0.6deg)) scale(0.997);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) rotate(var(--settle-rotate)) scale(1);
-  }
-}
-
-/* Escalonamento de filhos (cards, projetos) via --reveal-delay. */
-.reveal {
   animation-delay: var(--reveal-delay, 0ms);
 }
 
