@@ -6,10 +6,9 @@ export interface Props {
 const { height = 'normal' } = Astro.props;
 ---
 
-<div class="residual reveal" data-height={height} role="separator" aria-label="Intervalo visual" style="--settle-rotate:-0.2deg;">
+<div class="residual reveal" data-height={height} role="separator" aria-label="Intervalo visual" style="--settle-rotate:-2deg;">
   <span class="residual__tape residual__tape--a" aria-hidden="true"></span>
   <span class="residual__tape residual__tape--b" aria-hidden="true"></span>
-  <span class="residual__label" aria-hidden="true">colado / v.01</span>
 </div>
 
 <style>
@@ -23,9 +22,9 @@ const { height = 'normal' } = Astro.props;
     background: repeating-linear-gradient(
       90deg,
       var(--color-border-primary) 0,
-      var(--color-border-primary) 10px,
-      transparent 10px,
-      transparent 18px
+      var(--color-border-primary) 8px,
+      transparent 8px,
+      transparent 16px
     );
     opacity: 0.85;
   }
@@ -65,19 +64,6 @@ const { height = 'normal' } = Astro.props;
     width: 76px;
     transform: rotate(3.5deg);
     background: color-mix(in srgb, var(--foundation-color-terminal-green, #7bc942) 18%, transparent);
-  }
-
-  .residual__label {
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-1deg);
-    font-family: var(--type-voice-mono);
-    font-size: var(--type-size-micro);
-    letter-spacing: var(--type-tracking-navigation);
-    color: var(--color-text-secondary);
-    opacity: 0.55;
-    pointer-events: none;
   }
 
   .residual[data-height='compact'] {
