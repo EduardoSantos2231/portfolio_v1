@@ -21,8 +21,8 @@ const sortedProjects: ProjectDisplay[] = projects
   .sort((a: ProjectDisplay, b: ProjectDisplay) => a.order - b.order);
 
 const navLinks = [
-  { href: '/#info', label: 'INFO' },
-  { href: '/#projetos', label: 'PROJETOS' },
+  { href: import.meta.env.BASE_URL + '#info', label: 'INFO', i18nKey: 'nav.info' },
+  { href: import.meta.env.BASE_URL + '#projetos', label: 'PROJETOS', i18nKey: 'nav.projetos' },
 ];
 
 const footerMeta = {

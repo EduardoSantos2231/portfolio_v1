@@ -11,6 +11,7 @@ import MobileNav from './MobileNav.astro';
 interface NavLink {
   href: string;
   label: string;
+  i18nKey?: string;
 }
 
 interface FooterMeta {
@@ -50,13 +51,13 @@ const { navLinks, footerMeta } = Astro.props;
     </svg>
     <div class="grid-overlay" aria-hidden="true" />
     <div class="paper-noise" style="filter:url(#paper-grain)" aria-hidden="true" />
-    <nav class="nav" aria-label="Navegacao principal">
+    <nav class="nav" aria-label="Navegacao principal" data-i18n-aria="nav.arialabel">
       <div class="nav__progress" aria-hidden="true">
         <div class="nav__progress-fill" />
       </div>
       <div class="nav__items">
         {navLinks.map((link) => (
-          <NavigationItem href={link.href} label={link.label} />
+          <NavigationItem href={link.href} label={link.label} i18nKey={link.i18nKey} />
         ))}
       </div>
       <div class="nav__lang">
@@ -71,7 +72,7 @@ const { navLinks, footerMeta } = Astro.props;
     </main>
 
     <footer class="footer">
-      <span class="footer__nav">INFO · PROJETOS</span>
+      <span class="footer__nav" data-i18n="footer.nav">INFO · PROJETOS</span>
       <span class="footer__meta">Eduardo Nascimento · {footerMeta.date} · v{footerMeta.version}</span>
     </footer>
 
@@ -86,55 +87,90 @@ const { navLinks, footerMeta } = Astro.props;
     const isEn = lang === 'en';
 
     const map: Record<string, string> = isEn ? {
+      'nav.arialabel': 'Main navigation',
       'nav.info': 'INFO',
       'nav.projetos': 'WORK',
       'info.title': 'INFO',
       'about.cardLabel': 'DATASHEET',
+      'about.title': 'ABOUT',
       'about.nome': 'NAME',
       'about.formacao': 'EDUCATION',
       'about.area': 'FIELD',
       'about.localizacao': 'LOCATION',
       'about.linguagens': 'LANGUAGES',
+      'about.video_title': 'Presentation video',
+      'about.video_caption': 'FIG. 01 \u2014 PRESENTATION VIDEO',
       'projects.title': 'WORK',
       'projects.updated': 'UPDATED',
       'contact.cardLabel': 'CONTACT',
+      'contact.title': 'CONTACT',
       'contact.email': 'EMAIL',
       'contact.github': 'GITHUB',
       'contact.linkedin': 'LINKEDIN',
       'contact.localizacao': 'LOCATION',
+      'contact.external_link': 'Open external link',
+      'footer.nav': 'INFO \u00b7 WORK',
       'footer.version': 'VERSION',
+      'theme.light': 'LIGHT',
+      'theme.dark': 'DARK',
+      'lang.toggle': 'Switch language',
+      'info.arialabel': 'Information',
+      'mobile.open': 'Open navigation menu',
+      'mobile.close': 'Close navigation menu',
       'easter.quote': 'Everything is alien; only time is ours.',
       'easter.cite': 'Seneca, Letters to Lucilius, I',
       'postit.quote': 'Through narrow paths, to the heights.',
       'postit.cite': 'Seneca',
     } : {
+      'nav.arialabel': 'Navegacao principal',
       'nav.info': 'INFO',
       'nav.projetos': 'PROJETOS',
       'info.title': 'INFO',
       'about.cardLabel': 'FICHA TECNICA',
+      'about.title': 'SOBRE',
       'about.nome': 'NOME',
       'about.formacao': 'FORMACAO',
       'about.area': 'AREA',
       'about.localizacao': 'LOCALIZACAO',
       'about.linguagens': 'LINGUAGENS',
+      'about.video_title': 'Video de apresentacao',
+      'about.video_caption': 'FIG. 01 \u2014 VIDEO DE APRESENTACAO',
       'projects.title': 'PROJETOS',
       'projects.updated': 'ATUALIZADO EM',
       'contact.cardLabel': 'CONTATO',
+      'contact.title': 'CONTATO',
       'contact.email': 'EMAIL',
       'contact.github': 'GITHUB',
       'contact.linkedin': 'LINKEDIN',
       'contact.localizacao': 'LOCALIZACAO',
+      'contact.external_link': 'Abrir link externo',
+      'footer.nav': 'INFO \u00b7 PROJETOS',
       'footer.version': 'VERSAO',
-      'easter.quote': 'Tudo é alheio; apenas o tempo é nosso.',
-      'easter.cite': 'Sêneca, Cartas a Lucílio, I',
+      'theme.light': 'CLARO',
+      'theme.dark': 'ESCURO',
+      'lang.toggle': 'Alternar idioma',
+      'info.arialabel': 'Informacoes',
+      'mobile.open': 'Abrir menu de navegacao',
+      'mobile.close': 'Fechar menu de navegacao',
+      'easter.quote': 'Tudo \u00e9 alheio; apenas o tempo \u00e9 nosso.',
+      'easter.cite': 'S\u00eacheca, Cartas a Luc\u00edlio, I',
       'postit.quote': 'Per angusta ad augusta.',
-      'postit.cite': 'Sêneca',
+      'postit.cite': 'S\u00eacheca',
     };
+
+    html.setAttribute('lang', isEn ? 'en' : 'pt-BR');
 
     for (const el of document.querySelectorAll<HTMLElement>('[data-i18n]')) {
       const key = el.dataset.i18n;
       if (key && map[key]) {
         el.textContent = map[key];
+      }
+    }
+
+    for (const el of document.querySelectorAll<HTMLElement>('[data-i18n-aria]')) {
+      const key = el.dataset.i18nAria;
+      if (key && map[key]) {
+        el.setAttribute('aria-label', map[key]);
       }
     }
 
@@ -164,25 +200,27 @@ const { navLinks, footerMeta } = Astro.props;
 
     function updateActive() {
       const threshold = window.scrollY + window.innerHeight * 0.4;
-      let activeHref = '#info';
+      let activeHash = '#info';
       const scrollBottom = window.scrollY + window.innerHeight;
       const docBottom = document.body.scrollHeight - 40;
 
       if (scrollBottom >= docBottom) {
-        activeHref = '/#projetos';
+        activeHash = '#projetos';
       } else {
         for (let i = 0; i < sections.length; i++) {
           const target = sections[i];
           if (!target) continue;
           if (target.getBoundingClientRect().top + window.scrollY <= threshold) {
-            activeHref = '/#' + target.id;
+            activeHash = '#' + target.id;
           }
         }
       }
 
       for (const link of links) {
-        const isActive = link.getAttribute('href') === activeHref;
-        link.dataset.active = isActive ? 'true' : 'false';
+        const href = link.getAttribute('href') || '';
+        const hashIndex = href.indexOf('#');
+        const linkHash = hashIndex >= 0 ? href.slice(hashIndex) : '';
+        link.dataset.active = linkHash === activeHash ? 'true' : 'false';
       }
 
       if (progressFill) {

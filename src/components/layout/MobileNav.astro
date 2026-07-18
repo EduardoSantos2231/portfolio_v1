@@ -2,6 +2,7 @@
 interface NavLink {
   href: string;
   label: string;
+  i18nKey?: string;
 }
 
 interface Props {
@@ -27,7 +28,7 @@ const { navLinks } = Astro.props;
   {navLinks.map((link) => (
     <a href={link.href} class="mobile-fan__card">
       <span class="mobile-fan__card-tape" aria-hidden="true"></span>
-      <span>{link.label}</span>
+      <span data-i18n={link.i18nKey}>{link.label}</span>
     </a>
   ))}
 </div>
@@ -39,13 +40,21 @@ const { navLinks } = Astro.props;
 
     if (!trigger || !fan) return;
 
-    let expanded = false;
+    let     expanded = false;
+
+    function getLabels() {
+      const isEn = document.documentElement.getAttribute('data-lang') === 'en';
+      return {
+        open: isEn ? 'Open navigation menu' : 'Abrir menu de navegacao',
+        close: isEn ? 'Close navigation menu' : 'Fechar menu de navegacao',
+      };
+    }
 
     function expand() {
       expanded = true;
       fan!.removeAttribute('hidden');
       trigger!.setAttribute('aria-expanded', 'true');
-      trigger!.setAttribute('aria-label', 'Fechar menu de navegacao');
+      trigger!.setAttribute('aria-label', getLabels().close);
       const sym = trigger!.querySelector('.mobile-trigger__sym');
       if (sym) sym.textContent = '[\u2212]';
     }
@@ -54,7 +63,7 @@ const { navLinks } = Astro.props;
       expanded = false;
       fan!.setAttribute('hidden', '');
       trigger!.setAttribute('aria-expanded', 'false');
-      trigger!.setAttribute('aria-label', 'Abrir menu de navegacao');
+      trigger!.setAttribute('aria-label', getLabels().open);
       const sym = trigger!.querySelector('.mobile-trigger__sym');
       if (sym) sym.textContent = '[+]';
     }

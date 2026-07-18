@@ -3,9 +3,10 @@ export interface Props {
   href: string;
   label: string;
   active?: boolean;
+  i18nKey?: string;
 }
 
-const { href, label, active = false } = Astro.props;
+const { href, label, active = false, i18nKey } = Astro.props;
 ---
 
 <a
@@ -14,7 +15,7 @@ const { href, label, active = false } = Astro.props;
   data-active={active ? 'true' : undefined}
   aria-current={active ? 'page' : undefined}
 >
-  <span class="nav-item__label">{label}</span>
+  <span class="nav-item__label" data-i18n={i18nKey}>{label}</span>
 </a>
 
 <style>
