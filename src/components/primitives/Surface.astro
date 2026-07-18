@@ -33,9 +33,28 @@ const {
       2px 0, 98% 1px, 100% 4px, 100% 97%,
       calc(100% - 3px) 100%, 4px 100%, 0 98%, 0 3px
     );
-    filter: url('#pencil-stroke');
-    outline: 1px dashed var(--color-border-primary);
-    outline-offset: -3px;
+  }
+
+  .surface--container::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border: 1px solid var(--color-border-primary);
+    opacity: 0.5;
+    transform: rotate(0.3deg) scale(1.005);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .surface--container::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border: 1px dashed var(--color-border-primary);
+    opacity: 0.35;
+    transform: rotate(-0.2deg) scale(0.998);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .surface--inverse {
