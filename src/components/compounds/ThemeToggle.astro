@@ -1,0 +1,130 @@
+<span class="theme-toggle" id="theme-toggle" role="switch" tabindex="0">
+  <span class="theme-toggle__label">CLARO</span>
+</span>
+
+<script>
+  function initThemeToggle() {
+    const el = document.getElementById('theme-toggle');
+    if (!el) return;
+
+    const html = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (prefersDark ? 'dark' : 'light');
+
+    html.setAttribute('data-theme', theme);
+    updateLabel(theme);
+
+    el.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', current);
+      localStorage.setItem('theme', current);
+      updateLabel(current);
+    });
+
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        el.click();
+      }
+    });
+
+    function updateLabel(theme: string) {
+      if (!el) return;
+      const label = el.querySelector<HTMLElement>('.theme-toggle__label');
+      if (!label) return;
+      label.textContent = theme === 'dark' ? 'ESCURO' : 'CLARO';
+      el.setAttribute('aria-checked', String(theme === 'dark'));
+    }
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        const theme = e.matches ? 'dark' : 'light';
+        html.setAttribute('data-theme', theme);
+        updateLabel(theme);
+      }
+    });
+  }
+
+  initThemeToggle();
+</script>
+
+<style>
+  .theme-toggle {
+    position: fixed;
+    bottom: var(--space-margin-tecnico);
+    right: var(--space-margin-editorial);
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-gap-inline) var(--space-gap-metadata);
+    min-width: 80px;
+    min-height: 44px;
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-accent-stamp);
+    cursor: default;
+    user-select: none;
+    transform: rotate(-1deg);
+  }
+
+  .theme-toggle::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 14px;
+    height: 7px;
+    background-color: var(--color-surface-page);
+    border: 1px solid var(--color-border-primary);
+    transform: translateX(-50%) rotate(2deg);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: var(--space-border-width);
+    left: var(--space-border-width);
+    right: var(--space-border-width);
+    bottom: var(--space-border-width);
+    border: var(--space-border-width) solid var(--color-border-primary);
+    pointer-events: none;
+  }
+
+  .theme-toggle__label {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-small);
+    text-transform: uppercase;
+    letter-spacing: var(--type-tracking-navigation);
+    color: var(--color-text-inverse);
+    font-weight: var(--type-weight-mono-bold);
+    z-index: 1;
+    position: relative;
+  }
+
+  .theme-toggle:hover .theme-toggle__label {
+    animation: theme-glitch-hover var(--motion-hover) steps(3);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 2px;
+  }
+
+  @keyframes theme-glitch-hover {
+    0%, 100% { transform: translate(0, 0); }
+    20% { transform: translate(-2px, 1px); }
+    40% { transform: translate(2px, -1px); }
+    60% { transform: translate(-1px, 0); }
+    80% { transform: translate(1px, 0); }
+  }
+
+  @media (width <= 520px) {
+    .theme-toggle {
+      right: var(--space-gap-paragraph);
+      bottom: var(--space-gap-paragraph);
+    }
+  }
+</style>

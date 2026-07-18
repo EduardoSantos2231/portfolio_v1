@@ -1,0 +1,240 @@
+---
+interface NavLink {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  navLinks: NavLink[];
+}
+
+const { navLinks } = Astro.props;
+---
+
+<button
+  class="mobile-trigger"
+  id="mobile-trigger"
+  type="button"
+  aria-expanded="false"
+  aria-controls="mobile-fan"
+  aria-label="Abrir menu de navegacao"
+>
+  <span class="mobile-trigger__label">NAV</span>
+  <span class="mobile-trigger__sym" aria-hidden="true">[+]</span>
+</button>
+
+<div class="mobile-fan" id="mobile-fan" hidden>
+  {navLinks.map((link) => (
+    <a href={link.href} class="mobile-fan__card">
+      <span class="mobile-fan__card-tape" aria-hidden="true"></span>
+      <span>{link.label}</span>
+    </a>
+  ))}
+</div>
+
+<script>
+  function initMobileNav() {
+    const trigger = document.getElementById('mobile-trigger') as HTMLButtonElement | null;
+    const fan = document.getElementById('mobile-fan') as HTMLElement | null;
+
+    if (!trigger || !fan) return;
+
+    let expanded = false;
+
+    function expand() {
+      expanded = true;
+      fan!.removeAttribute('hidden');
+      trigger!.setAttribute('aria-expanded', 'true');
+      trigger!.setAttribute('aria-label', 'Fechar menu de navegacao');
+      const sym = trigger!.querySelector('.mobile-trigger__sym');
+      if (sym) sym.textContent = '[\u2212]';
+    }
+
+    function collapse() {
+      expanded = false;
+      fan!.setAttribute('hidden', '');
+      trigger!.setAttribute('aria-expanded', 'false');
+      trigger!.setAttribute('aria-label', 'Abrir menu de navegacao');
+      const sym = trigger!.querySelector('.mobile-trigger__sym');
+      if (sym) sym.textContent = '[+]';
+    }
+
+    trigger.addEventListener('click', () => {
+      if (expanded) collapse(); else expand();
+    });
+
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && expanded) {
+        collapse();
+        trigger!.focus();
+      }
+    });
+
+    document.addEventListener('click', (e: Event) => {
+      if (expanded && !trigger!.contains(e.target as Node) && !fan!.contains(e.target as Node)) {
+        collapse();
+      }
+    });
+
+    fan.querySelectorAll<HTMLAnchorElement>('.mobile-fan__card').forEach((link) => {
+      link.addEventListener('click', collapse);
+    });
+
+    function syncActive() {
+      const hash = window.location.hash || '#info';
+      fan!.querySelectorAll<HTMLAnchorElement>('.mobile-fan__card').forEach((card) => {
+        const href = card.getAttribute('href');
+        (card as HTMLElement).dataset.active = href && hash === href.slice(href.indexOf('#')) ? 'true' : '';
+      });
+    }
+    syncActive();
+    window.addEventListener('hashchange', syncActive);
+  }
+
+  initMobileNav();
+</script>
+
+<style is:global>
+  .mobile-trigger {
+    display: none;
+  }
+
+  .mobile-fan {
+    display: none;
+  }
+
+  @media (width <= 900px) {
+    .mobile-trigger {
+      display: inline-flex;
+      position: fixed;
+      top: var(--space-gap-paragraph);
+      left: var(--space-gap-paragraph);
+      z-index: 11;
+      align-items: center;
+      gap: var(--space-gap-inline);
+      min-width: 44px;
+      min-height: 44px;
+      padding: var(--space-gap-inline) var(--space-gap-metadata);
+      border: var(--space-border-width) solid var(--color-border-primary);
+      background-color: var(--color-surface-container);
+      font-family: var(--type-voice-mono);
+      font-size: var(--type-size-micro);
+      font-weight: var(--type-weight-mono-bold);
+      color: var(--color-text-primary);
+      text-transform: uppercase;
+      letter-spacing: var(--type-tracking-navigation);
+      cursor: pointer;
+    }
+
+    .mobile-trigger:hover {
+      background-color: var(--color-accent-stamp);
+      color: var(--color-text-inverse);
+    }
+
+    .mobile-trigger:focus-visible {
+      outline: 2px solid var(--color-accent-stamp);
+      outline-offset: 2px;
+    }
+
+    .mobile-trigger__sym {
+      font-family: var(--type-voice-mono);
+    }
+
+    .mobile-fan {
+      position: fixed;
+      top: 52px;
+      left: var(--space-gap-paragraph);
+      z-index: 9;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-gap-inline);
+    }
+
+    .mobile-fan[hidden] {
+      display: none;
+    }
+
+    .mobile-fan__card {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      min-height: 44px;
+      padding: var(--space-gap-inline) var(--space-gap-metadata);
+      border: var(--space-border-width) solid var(--color-border-primary);
+      background-color: var(--color-surface-container);
+      font-family: var(--type-voice-mono);
+      font-size: var(--type-size-micro);
+      color: var(--color-text-primary);
+      text-transform: uppercase;
+      text-decoration: none;
+      letter-spacing: var(--type-tracking-navigation);
+      transform: translateY(-12px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mobile-fan__card:nth-child(1) { align-self: flex-start; margin-left: 8px; }
+    .mobile-fan__card:nth-child(2) { align-self: center; margin-left: -12px; }
+
+    .mobile-fan__card-tape {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(2deg);
+      width: 24px;
+      height: 8px;
+      background: var(--color-accent-stamp);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .mobile-fan__card:nth-child(1) .mobile-fan__card-tape {
+      width: 22px;
+      transform: translateX(-50%) rotate(-3deg);
+    }
+
+    .mobile-fan__card:nth-child(2) .mobile-fan__card-tape {
+      width: 28px;
+      transform: translateX(-50%) rotate(3deg);
+    }
+
+    .mobile-fan:not([hidden]) .mobile-fan__card {
+      pointer-events: auto;
+      animation: mobile-drop-in var(--motion-expand) steps(4) forwards;
+    }
+
+    .mobile-fan:not([hidden]) .mobile-fan__card:nth-child(1) { animation-delay: 0ms; }
+    .mobile-fan:not([hidden]) .mobile-fan__card:nth-child(2) { animation-delay: 80ms; }
+
+    @keyframes mobile-drop-in {
+      from {
+        transform: translateY(-12px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .mobile-fan__card:hover {
+      background-color: var(--color-accent-stamp);
+      color: var(--color-text-inverse);
+      transform: translateY(0) rotate(0deg) !important;
+    }
+
+    .mobile-fan__card[data-active='true'] {
+      background-color: var(--color-surface-inverse);
+      color: var(--color-text-active);
+      border-color: var(--color-text-active);
+    }
+
+    .mobile-fan__card:focus-visible {
+      outline: 2px solid var(--color-accent-stamp);
+      outline-offset: 2px;
+    }
+  }
+</style>
