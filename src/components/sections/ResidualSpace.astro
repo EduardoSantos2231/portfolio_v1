@@ -32,6 +32,19 @@ const { height = 'normal' } = Astro.props;
     pointer-events: none;
   }
 
+  .residual::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    right: 20%;
+    width: 34px;
+    height: 12px;
+    background: var(--color-accent-stamp);
+    opacity: 0.3;
+    transform: rotate(4deg);
+    pointer-events: none;
+  }
+
   .residual[data-height='compact'] {
     margin-block: var(--space-gap-paragraph);
     height: 2px;

@@ -60,6 +60,21 @@ const { title, totalProjects, dateRange, lastUpdated, projects } = Astro.props;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+  }
+
+  .projects::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 30%;
+    width: 44px;
+    height: 14px;
+    background: var(--color-accent-stamp);
+    opacity: 0.4;
+    transform: rotate(-4deg);
+    pointer-events: none;
+    z-index: 2;
   }
 
   .projects__meta {
