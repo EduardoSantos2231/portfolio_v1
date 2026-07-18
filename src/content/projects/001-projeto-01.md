@@ -5,8 +5,8 @@ category: "BACKEND"
 technologies: ["go", "postgres", "redis", "grpc"]
 description: "Motor de roteamento com consistencia eventual e failover automatico."
 image:
-  src: "/images/placeholder-01.png"
-  alt: "FIG. 02 — diagrama de arquitetura — 2024"
+  src: "/images/project-placeholder.svg"
+  alt: "FIG. 01 — diagrama de arquitetura — 2024"
 featured: true
 order: 2
 ---
