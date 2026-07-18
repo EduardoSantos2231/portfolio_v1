@@ -1,0 +1,86 @@
+---
+import TechnicalLayout from '../layout/TechnicalLayout.astro';
+import Text from '../primitives/Text.astro';
+import SectionTitle from '../compounds/SectionTitle.astro';
+import ProjectPreview from '../compounds/ProjectPreview.astro';
+
+export interface ProjectData {
+  id: string;
+  title: string;
+  date: string;
+  technologies: string[];
+  description?: string;
+  image: { src: string; alt: string };
+}
+
+export interface Props {
+  title: string;
+  totalProjects: number;
+  dateRange: string;
+  lastUpdated: string;
+  projects: ProjectData[];
+}
+
+const { title, totalProjects, dateRange, lastUpdated, projects } = Astro.props;
+---
+
+<TechnicalLayout>
+  <section class="projects" aria-labelledby="projects-title">
+    <SectionTitle label={title} prefix="slash" i18nKey="projects.title" />
+
+    <div class="projects__meta">
+      <Text voice="mono" size="small" color="secondary" as="span">
+        <span id="projects-total" data-count={String(totalProjects)} data-i18n="projects.total">
+          {`${totalProjects} PROJETOS REGISTRADOS`}
+        </span>
+      </Text>
+      <span class="projects__meta-sep" aria-hidden="true">{'\u00B7'}</span>
+      <Text voice="mono" size="small" color="secondary" as="span">
+        {dateRange}
+      </Text>
+      <span class="projects__meta-sep" aria-hidden="true">{'\u00B7'}</span>
+      <Text voice="mono" size="small" color="secondary" as="span">
+        <span id="projects-updated" data-date={lastUpdated} data-i18n="projects.updated">
+          ATUALIZADO EM {lastUpdated}
+        </span>
+      </Text>
+    </div>
+
+    <ul class="projects__grid" role="list">
+      {projects.map((project) => (
+        <ProjectPreview project={project} />
+      ))}
+    </ul>
+  </section>
+</TechnicalLayout>
+
+<style>
+  .projects {
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .projects__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-gap-inline);
+    padding-block-start: var(--space-gap-metadata);
+  }
+
+  .projects__meta-sep {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-small);
+    color: var(--color-text-secondary);
+  }
+
+  .projects__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), 1fr);
+    list-style: none;
+    gap: var(--space-gap-paragraph);
+    padding-block-start: var(--space-gap-section);
+    margin-block-start: var(--space-gap-section);
+  }
+</style>

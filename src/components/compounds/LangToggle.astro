@@ -1,0 +1,127 @@
+<div class="lang-toggle" id="lang-toggle" role="group" aria-label="Alternar idioma">
+  <button type="button" class="lang-toggle__btn" data-lang-option="pt"><span class="lang-toggle__txt">PT</span></button>
+  <span class="lang-toggle__rule" aria-hidden="true" />
+  <button type="button" class="lang-toggle__btn" data-lang-option="en"><span class="lang-toggle__txt">EN</span></button>
+</div>
+
+<script>
+  function initLangToggle() {
+    const toggle = document.getElementById('lang-toggle');
+    if (!toggle) return;
+
+    const html = document.documentElement;
+    const saved = localStorage.getItem('lang') || 'pt';
+    html.setAttribute('data-lang', saved);
+    updateHighlight(saved);
+
+    toggle.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-lang-option]');
+      if (!btn) return;
+      const lang = btn.dataset.langOption!;
+      localStorage.setItem('lang', lang);
+      html.setAttribute('data-lang', lang);
+      updateHighlight(lang);
+    });
+
+    function updateHighlight(lang: string) {
+      for (const btn of toggle!.querySelectorAll<HTMLElement>('[data-lang-option]')) {
+        btn.dataset.active = btn.dataset.langOption === lang ? 'true' : '';
+      }
+    }
+  }
+
+  initLangToggle();
+</script>
+
+<style>
+  .lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .lang-toggle__btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 44px;
+    padding: var(--space-gap-inline) var(--space-gap-metadata);
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-surface-container);
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-micro);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: var(--type-tracking-navigation);
+    border-radius: 0;
+  }
+
+  .lang-toggle__btn::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 16px;
+    height: 8px;
+    background-color: var(--color-surface-page);
+    border: 1px solid var(--color-text-secondary);
+    transform: translateX(-50%) rotate(-3deg);
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 1;
+  }
+
+  .lang-toggle__btn[data-lang-option='pt'] {
+    transform: rotate(-0.5deg);
+  }
+
+  .lang-toggle__btn[data-lang-option='en'] {
+    transform: rotate(0.5deg);
+  }
+
+  .lang-toggle__btn[data-active='true'] {
+    background-color: var(--color-surface-inverse);
+    color: var(--color-text-inverse);
+    border-color: var(--color-accent-stamp);
+  }
+
+  .lang-toggle__btn[data-active='true']::after {
+    background-color: var(--color-surface-inverse);
+    border-color: var(--color-accent-stamp);
+  }
+
+  .lang-toggle__btn:focus-visible {
+    outline: 2px solid var(--color-accent-stamp);
+    outline-offset: 2px;
+  }
+
+  .lang-toggle__rule {
+    display: block;
+    width: 1px;
+    height: 16px;
+    background-color: var(--color-border-primary);
+    flex-shrink: 0;
+  }
+
+  @keyframes lang-glitch {
+    0%, 100% { transform: translate(0, 0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(2px, -1px); }
+    60% { transform: translate(-1px, 0); }
+    80% { transform: translate(1px, 0); }
+  }
+
+  .lang-toggle__btn:hover:not([data-active='true']) .lang-toggle__txt {
+    animation: lang-glitch var(--motion-hover) steps(3);
+  }
+
+  .lang-toggle__btn:hover:not([data-active='true']) {
+    background-color: var(--color-accent-stamp);
+    color: var(--color-text-inverse);
+  }
+</style>

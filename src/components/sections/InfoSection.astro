@@ -1,0 +1,313 @@
+---
+import SectionTitle from '../compounds/SectionTitle.astro';
+import Text from '../primitives/Text.astro';
+
+interface Field {
+  label: string;
+  value: string;
+  i18nKey: string;
+}
+
+interface ContactItem {
+  label: string;
+  value: string;
+  href?: string;
+  i18nKey: string;
+}
+
+export interface Props {
+  fields: Field[];
+  contacts: ContactItem[];
+  closingQuote?: string;
+}
+
+const { fields, contacts, closingQuote } = Astro.props;
+---
+
+<section id="info" class="info" aria-label="Informacoes">
+  <header class="info__header">
+    <SectionTitle label="INFO" prefix="slash" i18nKey="info.title" voice="serif" size="headline" />
+  </header>
+
+  <div class="info__cards">
+    <div class="info__card info__card--about">
+      <span class="info__card-label">
+        <Text voice="mono" size="small" color="secondary" as="span">
+          <span data-i18n="about.cardLabel">FICHA TECNICA</span>
+        </Text>
+      </span>
+
+      <div class="info__contact-lines">
+        {fields.map(({ label, value, i18nKey }) => (
+          <div class="info__contact-line">
+            <span class="info__contact-link">
+              <Text voice="mono" size="small" color="secondary" as="span">
+                <span data-i18n={i18nKey}>{label}</span>
+              </Text>
+              <span class="info__contact-sep" aria-hidden="true">{'\u00B7'}</span>
+              <Text voice="mono" size="small" color="primary" as="span">{value}</Text>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="info__card info__card--contact">
+      <span class="info__card-label">
+        <Text voice="mono" size="small" color="secondary" as="span">
+          <span data-i18n="contact.cardLabel">CONTATO</span>
+        </Text>
+      </span>
+
+      <div class="info__contact-lines">
+        {contacts.map((c) => (
+          <div class="info__contact-line">
+            <a href={c.href} class="info__contact-link">
+              <Text voice="mono" size="small" color="secondary" as="span">
+                <span data-i18n={c.i18nKey}>{c.label}</span>
+              </Text>
+              <span class="info__contact-sep" aria-hidden="true">{'\u00B7'}</span>
+              <Text voice="mono" size="small" color="primary" as="span">{c.value}</Text>
+            </a>
+          </div>
+        ))}
+      </div>
+
+      {closingQuote && (
+        <div class="info__closing">
+          <Text voice="serif" size="small" weight="italic" color="primary" as="p">
+            {closingQuote}
+          </Text>
+        </div>
+      )}
+    </div>
+  </div>
+
+  <blockquote class="info__easter">
+    &ldquo;Omnia aliena sunt; tempus tantum nostrum est.&rdquo;<br />
+    &mdash; Tudo &eacute; alheio; apenas o tempo &eacute; nosso.
+    <cite>S&ecirc;neca, Cartas a Luc&iacute;lio, I</cite>
+  </blockquote>
+</section>
+
+<style>
+  .info {
+    max-width: 1280px;
+    margin: 0 auto;
+    min-height: 85vh;
+    padding: var(--space-margin-editorial);
+    padding-block-start: var(--space-gap-section);
+  }
+
+  .info__header {
+    margin-bottom: var(--space-gap-section);
+  }
+
+  .info__cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: 60vh;
+    position: relative;
+    border: var(--space-border-width) solid var(--color-border-primary);
+  }
+
+  .info__cards::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: var(--space-border-width);
+    background-color: var(--color-border-primary);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .info__cards::after {
+    content: '';
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    width: 50px;
+    height: 14px;
+    background: var(--color-accent-stamp);
+    opacity: 0.45;
+    transform: translateX(-50%) rotate(-2deg);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .info__card {
+    position: relative;
+    padding: var(--space-margin-editorial);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .info__card--about {
+    background-color: var(--color-surface-page);
+  }
+
+  .info__card--about::after {
+    content: '';
+    position: absolute;
+    top: 52%;
+    right: -6px;
+    width: 48px;
+    height: 14px;
+    background: var(--color-accent-stamp);
+    opacity: 0.45;
+    transform: rotate(3deg);
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .info__card--contact {
+    background-color: var(--color-surface-container);
+  }
+
+  .info__card--contact::after {
+    content: '';
+    position: absolute;
+    top: 74%;
+    left: -6px;
+    width: 54px;
+    height: 14px;
+    background: var(--color-accent-stamp);
+    opacity: 0.45;
+    transform: rotate(-3deg);
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .info__card-label {
+    display: block;
+    margin-bottom: var(--space-gap-section);
+    border-bottom: var(--space-border-width) solid var(--color-border-primary);
+    padding-bottom: var(--space-gap-inline);
+  }
+
+  .info__contact-lines {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .info__contact-line {
+    padding-block: var(--space-gap-inline);
+    padding-inline: var(--space-gap-inline);
+    transform: rotate(0.15deg);
+  }
+
+  .info__contact-line:nth-child(2n) {
+    transform: rotate(-0.2deg);
+  }
+
+  .info__contact-line:nth-child(even) {
+    background-color: var(--color-surface-page);
+  }
+
+  .info__contact-line:nth-child(odd) {
+    background-color: var(--color-surface-container);
+  }
+
+  .info__contact-link {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-gap-inline);
+    text-decoration: none;
+  }
+
+  .info__contact-sep {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-small);
+    color: var(--color-text-secondary);
+  }
+
+  .info__closing {
+    margin-top: var(--space-gap-section);
+    text-align: right;
+  }
+
+  .info__closing :global(.text[data-voice='serif']) {
+    text-shadow: 0.5px 0.5px 0 var(--color-text-primary);
+  }
+
+  .info__easter {
+    max-width: 680px;
+    margin: var(--space-margin-tecnico) 0 0 auto;
+    text-align: right;
+    font-family: var(--type-voice-serif);
+    font-size: var(--type-size-small);
+    font-style: italic;
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+    line-height: 1.6;
+  }
+
+  .info__easter cite {
+    display: block;
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-micro);
+    font-style: normal;
+    color: var(--color-text-secondary);
+    margin-block-start: var(--space-gap-inline);
+    letter-spacing: var(--type-tracking-navigation);
+  }
+
+  @media (width <= 900px) {
+    .info {
+      padding: var(--space-margin-tecnico);
+    }
+
+    .info__card {
+      padding: var(--space-gap-section);
+    }
+
+    .info__cards {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .info__cards::before {
+      top: 50%;
+      bottom: auto;
+      left: 0;
+      right: 0;
+      width: auto;
+      height: var(--space-border-width);
+    }
+
+    .info__cards::after {
+      top: 50%;
+      left: 18%;
+      width: 50px;
+      height: 14px;
+      transform: translateY(-50%) rotate(1deg);
+    }
+
+    .info__card--about::after {
+      top: 50%;
+      right: auto;
+      left: 55%;
+      transform: translateY(-50%) rotate(3deg);
+    }
+
+    .info__card--contact::after {
+      top: 50%;
+      left: 35%;
+      transform: translateY(-50%) rotate(-3deg);
+    }
+  }
+
+  @media (width <= 520px) {
+    .info {
+      padding: var(--space-gap-paragraph);
+    }
+
+    .info__card {
+      padding: var(--space-gap-paragraph);
+    }
+  }
+</style>
