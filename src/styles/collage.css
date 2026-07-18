@@ -127,6 +127,34 @@
   animation-delay: var(--reveal-delay, 0ms);
 }
 
+.reveal.is-pasted {
+  animation: paste-in 620ms cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+}
+
+.reveal.is-settled {
+  opacity: 1;
+  animation: none;
+  transform: translateY(0) rotate(var(--settle-rotate)) scale(1);
+}
+
+@keyframes paste-in {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) rotate(calc(var(--settle-rotate) - 4deg)) scale(0.965);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(-4px) rotate(calc(var(--settle-rotate) + 1.4deg)) scale(1.012);
+  }
+  78% {
+    transform: translateY(1px) rotate(calc(var(--settle-rotate) - 0.6deg)) scale(0.997);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--settle-rotate)) scale(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
