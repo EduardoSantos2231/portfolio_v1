@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "npx tsx scripts/fetch-github.ts",
+    "prebuild": "npx tsx --env-file=.env scripts/fetch-github.ts",
     "build": "astro build",
     "preview": "astro preview",
     "check:contrast": "tsx scripts/check-contrast.ts",
