@@ -40,9 +40,7 @@ const footerMeta = {
     fields={[
       { label: 'NOME', value: aboutData.fields.find((f: { label: string }) => f.label === 'NOME')?.value || '[aguardando dados]', i18nKey: 'about.nome' },
       { label: 'FORMACAO', value: aboutData.fields.find((f: { label: string }) => f.label === 'FORMACAO')?.value || '[aguardando dados]', i18nKey: 'about.formacao' },
-      { label: 'AREA', value: aboutData.fields.find((f: { label: string }) => f.label === 'AREA')?.value || '', i18nKey: 'about.area' },
       { label: 'LOCALIZACAO', value: aboutData.fields.find((f: { label: string }) => f.label === 'LOCALIZACAO')?.value || '', i18nKey: 'about.localizacao' },
-      { label: 'LINGUAGENS', value: aboutData.fields.find((f: { label: string }) => f.label === 'LINGUAGENS')?.value || '', i18nKey: 'about.linguagens' },
     ]}
     contacts={[
       { label: 'EMAIL', value: 'eduardonascimento@gmail.com', href: 'mailto:eduardonascimento@gmail.com', i18nKey: 'contact.email' },
@@ -60,6 +58,8 @@ const footerMeta = {
     focus={careerData.focus}
     seeking={careerData.seeking}
     languages={careerData.languages}
+    idiomas={careerData.idiomas}
+    interesses={careerData.interesses}
     bio={careerData.bio}
     milestones={careerData.milestones}
   />

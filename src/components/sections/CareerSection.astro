@@ -16,11 +16,13 @@ export interface Props {
   focus: string;
   seeking: string;
   languages: string;
+  idiomas: string;
+  interesses: string;
   bio: string;
   milestones: CareerMilestone[];
 }
 
-const { videoUrl, videoUrlEn, focus, seeking, languages, bio, milestones } = Astro.props;
+const { videoUrl, videoUrlEn, focus, seeking, languages, idiomas, interesses, bio, milestones } = Astro.props;
 const hasVideo = videoUrl !== null || videoUrlEn !== null;
 ---
 
@@ -69,12 +71,6 @@ const hasVideo = videoUrl !== null || videoUrlEn !== null;
       </figure>
 
       <article class="career__datasheet hard-shadow reveal" style="--settle-rotate:0.6deg;--reveal-delay:200ms;--reveal-origin:80% 0%;">
-        <span class="career__datasheet-label">
-          <Text voice="mono" size="small" color="secondary" as="span">
-            <span data-i18n="career.cardLabel">FICHA TECNICA</span>
-          </Text>
-        </span>
-
         <dl class="career__datasheet-fields">
           <div class="career__datasheet-field">
             <dt>
@@ -104,6 +100,26 @@ const hasVideo = videoUrl !== null || videoUrlEn !== null;
             </dt>
             <dd>
               <Text voice="mono" size="small" color="primary" as="span">{languages}</Text>
+            </dd>
+          </div>
+          <div class="career__datasheet-field">
+            <dt>
+              <Text voice="mono" size="small" color="secondary" as="span">
+                <span data-i18n="career.idiomas">IDIOMAS</span>
+              </Text>
+            </dt>
+            <dd>
+              <Text voice="mono" size="small" color="primary" as="span">{idiomas}</Text>
+            </dd>
+          </div>
+          <div class="career__datasheet-field">
+            <dt>
+              <Text voice="mono" size="small" color="secondary" as="span">
+                <span data-i18n="career.interesses">INTERESSES</span>
+              </Text>
+            </dt>
+            <dd>
+              <Text voice="mono" size="small" color="primary" as="span">{interesses}</Text>
             </dd>
           </div>
         </dl>
@@ -316,13 +332,6 @@ const hasVideo = videoUrl !== null || videoUrlEn !== null;
   .career__datasheet > * {
     position: relative;
     z-index: 1;
-  }
-
-  .career__datasheet-label {
-    display: block;
-    border-bottom: var(--space-border-width) solid var(--color-border-primary);
-    padding-bottom: var(--space-gap-inline);
-    margin-bottom: var(--space-gap-paragraph);
   }
 
   .career__datasheet-fields {

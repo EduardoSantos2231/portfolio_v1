@@ -13,6 +13,8 @@ export interface CareerData {
   focus: string;
   seeking: string;
   languages: string;
+  idiomas: string;
+  interesses: string;
   bio: string;
   milestones: CareerMilestone[];
 }
@@ -25,6 +27,8 @@ export const careerData: CareerData = {
   focus: "Desenvolvimento fullstack",
   seeking: "Estágio ou júnior — remoto ou presencial",
   languages: "Go · TypeScript · React · Node · SQL · Docker · Astro",
+  idiomas: "Português (nativo) · Inglês (avançado)",
+  interesses: "Sistemas distribuídos · design systems · redes · arquitetura de software",
   bio: "Movido por curiosidade técnica e pelo impulso de entender sistemas por completo. Fora do código, perco-me em esportes de combate e em livros que expandem minha visão de mundo. Mantenho um registro diário do que estudo: aprender é um projeto para a vida inteira.",
   milestones: [
     {
