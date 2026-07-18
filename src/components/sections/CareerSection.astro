@@ -1,0 +1,464 @@
+---
+import SectionTitle from '../compounds/SectionTitle.astro';
+import Text from '../primitives/Text.astro';
+import CropMark from '../primitives/CropMark.astro';
+
+export interface CareerMilestone {
+  year: string;
+  title: string;
+  subtitle: string;
+  note: string;
+}
+
+export interface Props {
+  videoUrl: string | null;
+  videoUrlEn: string | null;
+  focus: string;
+  seeking: string;
+  languages: string;
+  bio: string;
+  milestones: CareerMilestone[];
+}
+
+const { videoUrl, videoUrlEn, focus, seeking, languages, bio, milestones } = Astro.props;
+const hasVideo = videoUrl !== null || videoUrlEn !== null;
+---
+
+<section id="carreira" class="career" aria-label="Trajetoria profissional" data-i18n-aria="career.arialabel">
+  <header class="career__header reveal" style="--settle-rotate:0deg;--reveal-origin:0% 50%;">
+    <SectionTitle label="TRAJETORIA" prefix="slash" i18nKey="career.title" voice="serif" size="headline" />
+  </header>
+
+  <div class="career__grid">
+    <div class="career__left">
+
+      <figure class="career__video hard-shadow reveal" style="--settle-rotate:-1.2deg;--reveal-delay:80ms;--reveal-origin:20% 0%;">
+        <span class="career__video-tape" aria-hidden="true"></span>
+        <CropMark position="top-left" />
+        <CropMark position="top-right" />
+        <CropMark position="bottom-left" />
+        <CropMark position="bottom-right" />
+
+        <div class="career__video-embed">
+          {hasVideo ? (
+            <iframe
+              id="career-video"
+              src={videoUrl || videoUrlEn || ''}
+              data-pt-url={videoUrl || ''}
+              data-en-url={videoUrlEn || ''}
+              data-i18n-aria="career.videoTitle"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          ) : (
+            <div class="career__video-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 80 80" width="48" height="48">
+                <polygon points="28,20 28,60 62,40" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" />
+              </svg>
+              <span class="career__video-placeholder-text">EM BREVE</span>
+            </div>
+          )}
+        </div>
+
+        <figcaption class="career__video-caption">
+          <Text voice="mono" size="micro" color="secondary" as="figcaption">
+            <span data-i18n="career.videoCaption">FIG. 02 — APRESENTACAO</span>
+          </Text>
+        </figcaption>
+      </figure>
+
+      <article class="career__datasheet hard-shadow reveal" style="--settle-rotate:0.6deg;--reveal-delay:200ms;--reveal-origin:80% 0%;">
+        <span class="career__datasheet-label">
+          <Text voice="mono" size="small" color="secondary" as="span">
+            <span data-i18n="career.cardLabel">FICHA TECNICA</span>
+          </Text>
+        </span>
+
+        <dl class="career__datasheet-fields">
+          <div class="career__datasheet-field">
+            <dt>
+              <Text voice="mono" size="small" color="secondary" as="span">
+                <span data-i18n="career.focus">FOCO ATUAL</span>
+              </Text>
+            </dt>
+            <dd>
+              <Text voice="mono" size="small" color="primary" as="span">{focus}</Text>
+            </dd>
+          </div>
+          <div class="career__datasheet-field">
+            <dt>
+              <Text voice="mono" size="small" color="secondary" as="span">
+                <span data-i18n="career.seeking">BUSCANDO</span>
+              </Text>
+            </dt>
+            <dd>
+              <Text voice="mono" size="small" color="primary" as="span">{seeking}</Text>
+            </dd>
+          </div>
+          <div class="career__datasheet-field">
+            <dt>
+              <Text voice="mono" size="small" color="secondary" as="span">
+                <span data-i18n="career.languages">LINGUAGENS</span>
+              </Text>
+            </dt>
+            <dd>
+              <Text voice="mono" size="small" color="primary" as="span">{languages}</Text>
+            </dd>
+          </div>
+        </dl>
+
+        <div class="career__datasheet-bio">
+          <Text voice="serif" size="small" weight="italic" color="primary" as="p">
+            {bio}
+          </Text>
+        </div>
+      </article>
+    </div>
+
+    <div class="career__right">
+      <div class="career__timeline reveal" style="--settle-rotate:0.2deg;--reveal-delay:300ms;--reveal-origin:50% 0%;">
+        {milestones.map((milestone) => (
+          <article class="career__milestone">
+            <div class="career__milestone-marker" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="14" height="14" class="career__milestone-svg">
+                <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="2" />
+                <circle cx="8" cy="8" r="3" fill="currentColor" />
+              </svg>
+            </div>
+            <div class="career__milestone-content">
+              <Text voice="mono" size="micro" color="secondary" as="time" tracking="expanded">
+                {milestone.year}
+              </Text>
+              <Text voice="serif" size="small" weight="bold" color="primary" as="h3">
+                {milestone.title}
+              </Text>
+              <Text voice="mono" size="micro" color="secondary" as="p">
+                {milestone.subtitle}
+              </Text>
+              <Text voice="mono" size="micro" color="secondary" as="p">
+                {milestone.note}
+              </Text>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initCareerVideo() {
+    const iframe = document.getElementById('career-video') as HTMLIFrameElement | null;
+    if (!iframe) return;
+
+    const ptUrl = iframe.dataset.ptUrl || '';
+    const enUrl = iframe.dataset.enUrl || '';
+
+    function updateSrc() {
+      const lang = document.documentElement.getAttribute('data-lang') || 'pt';
+      const url = lang === 'en' && enUrl ? enUrl : ptUrl;
+      if (url && iframe && iframe.src !== url) {
+        iframe.src = url;
+      }
+    }
+
+    updateSrc();
+    new MutationObserver(updateSrc).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-lang'],
+    });
+  }
+
+  initCareerVideo();
+</script>
+
+<style>
+  .career {
+    max-width: 1280px;
+    margin: 0 auto;
+    min-height: 85vh;
+    padding: var(--space-margin-editorial);
+    padding-block-start: var(--space-gap-section);
+  }
+
+  .career__header {
+    margin-bottom: var(--space-gap-section);
+    position: relative;
+  }
+
+  .career__header::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 28%;
+    width: 44px;
+    height: 14px;
+    background: var(--color-accent-stamp);
+    opacity: 0.4;
+    transform: rotate(-3deg);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .career__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-gap-section);
+    position: relative;
+  }
+
+  .career__grid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(50% + 1px);
+    width: 1px;
+    background: repeating-linear-gradient(
+      var(--color-border-primary) 0,
+      var(--color-border-primary) 5px,
+      transparent 5px,
+      transparent 9px
+    );
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.65;
+  }
+
+  .career__left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-gap-section);
+  }
+
+  .career__video {
+    position: relative;
+    padding: var(--space-gap-inline);
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-surface-container);
+  }
+
+  .career__video-tape {
+    position: absolute;
+    top: -9px;
+    left: 18px;
+    width: 44px;
+    height: 16px;
+    background: color-mix(in srgb, var(--color-accent-stamp) 22%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--color-border-primary) 30%, transparent);
+    z-index: 4;
+    transform: rotate(-3deg);
+    pointer-events: none;
+  }
+
+  .career__video-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%;
+  }
+
+  .career__video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background: var(--color-surface-inverse);
+  }
+
+  .career__video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-gap-inline);
+    color: var(--color-text-secondary);
+    opacity: 0.3;
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background: var(--color-surface-inverse);
+  }
+
+  .career__video-placeholder-text {
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-micro);
+    letter-spacing: var(--type-tracking-navigation);
+    color: var(--color-text-secondary);
+  }
+
+  .career__video-caption {
+    padding: var(--space-gap-inline);
+    padding-bottom: 0;
+  }
+
+  .career__datasheet {
+    position: relative;
+    padding: var(--space-margin-editorial);
+    border: var(--space-border-width) solid var(--color-border-primary);
+    background-color: var(--color-surface-page);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .career__datasheet::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid var(--color-border-primary);
+    transform: rotate(0.15deg);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  .career__datasheet > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .career__datasheet-label {
+    display: block;
+    border-bottom: var(--space-border-width) solid var(--color-border-primary);
+    padding-bottom: var(--space-gap-inline);
+    margin-bottom: var(--space-gap-paragraph);
+  }
+
+  .career__datasheet-fields {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .career__datasheet-field {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-gap-inline);
+    padding: var(--space-gap-inline);
+  }
+
+  .career__datasheet-field:nth-child(odd) {
+    background-color: var(--color-surface-container);
+    transform: rotate(0.1deg);
+  }
+
+  .career__datasheet-field:nth-child(even) {
+    transform: rotate(-0.08deg);
+  }
+
+  .career__datasheet-field dt {
+    flex-shrink: 0;
+  }
+
+  .career__datasheet-field dd {
+    margin: 0;
+  }
+
+  .career__datasheet-bio {
+    margin-top: var(--space-gap-paragraph);
+    padding-top: var(--space-gap-paragraph);
+    border-top: var(--space-border-width) solid var(--color-border-primary);
+  }
+
+  .career__right {
+    padding-left: var(--space-gap-inline);
+  }
+
+  .career__timeline {
+    position: relative;
+    padding-left: var(--space-margin-editorial);
+    border-left: 2px dashed var(--color-border-primary);
+  }
+
+  .career__milestone {
+    position: relative;
+    padding-bottom: var(--space-margin-editorial);
+  }
+
+  .career__milestone:last-child {
+    padding-bottom: 0;
+  }
+
+  .career__milestone-marker {
+    position: absolute;
+    left: calc(-1 * var(--space-margin-editorial) - 8px);
+    top: 3px;
+    z-index: 1;
+    line-height: 0;
+    color: var(--color-accent-stamp);
+  }
+
+  .career__milestone-svg {
+    display: block;
+    transition: transform var(--motion-hover) steps(3);
+  }
+
+  .career__milestone:hover .career__milestone-svg {
+    transform: scale(1.3);
+  }
+
+  .career__milestone-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-gap-inline);
+  }
+
+  .career__milestone-content h3 {
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (width <= 900px) {
+    .career {
+      padding: var(--space-margin-tecnico);
+    }
+
+    .career__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .career__grid::before {
+      display: none;
+    }
+
+    .career__right {
+      padding-left: 0;
+    }
+
+    .career__datasheet {
+      padding: var(--space-gap-section);
+    }
+
+    .career__timeline {
+      padding-left: var(--space-margin-tecnico);
+    }
+
+    .career__milestone-marker {
+      left: calc(-1 * var(--space-margin-tecnico) - 8px);
+    }
+  }
+
+  @media (width <= 520px) {
+    .career {
+      padding: var(--space-gap-paragraph);
+    }
+
+    .career__datasheet {
+      padding: var(--space-gap-paragraph);
+    }
+
+    .career__timeline {
+      padding-left: var(--space-gap-paragraph);
+    }
+
+    .career__milestone-marker {
+      left: calc(-1 * var(--space-gap-paragraph) - 8px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .career__milestone:hover .career__milestone-svg {
+      transform: none;
+    }
+  }
+</style>

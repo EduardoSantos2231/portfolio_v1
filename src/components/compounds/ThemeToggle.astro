@@ -33,9 +33,17 @@
       if (!el) return;
       const label = el.querySelector<HTMLElement>('.theme-toggle__label');
       if (!label) return;
-      label.textContent = theme === 'dark' ? 'ESCURO' : 'CLARO';
+      const lang = html.getAttribute('data-lang') || 'pt';
+      const isEn = lang === 'en';
+      const darkLabel = isEn ? 'DARK' : 'ESCURO';
+      const lightLabel = isEn ? 'LIGHT' : 'CLARO';
+      label.textContent = theme === 'dark' ? darkLabel : lightLabel;
       el.setAttribute('aria-checked', String(theme === 'dark'));
     }
+
+    new MutationObserver(() => {
+      updateLabel(html.getAttribute('data-theme') || 'light');
+    }).observe(html, { attributes: true, attributeFilter: ['data-lang'] });
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem('theme')) {
