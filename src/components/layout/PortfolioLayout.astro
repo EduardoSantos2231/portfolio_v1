@@ -2,6 +2,7 @@
 import '../../styles/tokens.css';
 import '../../styles/reset.css';
 import '../../styles/layout.css';
+import '../../styles/collage.css';
 import NavigationItem from '../compounds/NavigationItem.astro';
 import LangToggle from '../compounds/LangToggle.astro';
 import ThemeToggle from '../compounds/ThemeToggle.astro';
@@ -239,8 +240,46 @@ const { navLinks, footerMeta } = Astro.props;
     applyTranslations();
   }
 
+  function setupCollageReveal() {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const targets = document.querySelectorAll<HTMLElement>('.reveal');
+
+    if (prefersReduced || !('IntersectionObserver' in window)) {
+      for (const el of targets) {
+        el.classList.add('is-settled');
+      }
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            el.classList.add('is-pasted');
+            el.addEventListener(
+              'animationend',
+              () => {
+                el.classList.add('is-settled');
+                el.classList.remove('is-pasted');
+              },
+              { once: true }
+            );
+            observer.unobserve(el);
+          }
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -8% 0px' }
+    );
+
+    for (const el of targets) {
+      observer.observe(el);
+    }
+  }
+
   setupScrollSpy();
   observeLangChange();
+  setupCollageReveal();
 </script>
 
 <style>
@@ -249,21 +288,23 @@ const { navLinks, footerMeta } = Astro.props;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.12;
+    --_fine: color-mix(in srgb, var(--color-grid-line) 22%, transparent);
+    --_bold: color-mix(in srgb, var(--color-grid-line) 40%, transparent);
     background-image:
-      linear-gradient(
-        0deg,
-        transparent 95px,
-        var(--color-border-primary) 95px,
-        var(--color-border-primary) 96px
-      ),
-      linear-gradient(
-        90deg,
-        transparent 95px,
-        var(--color-border-primary) 95px,
-        var(--color-border-primary) 96px
-      );
-    background-size: 96px 96px;
+      linear-gradient(to right, var(--_fine) 0, var(--_fine) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--_fine) 0, var(--_fine) 1px, transparent 1px),
+      linear-gradient(to right, var(--_bold) 0, var(--_bold) 1.5px, transparent 1.5px),
+      linear-gradient(to bottom, var(--_bold) 0, var(--_bold) 1.5px, transparent 1.5px);
+    background-size:
+      var(--graph-cell-fine, 22px) var(--graph-cell-fine, 22px),
+      var(--graph-cell-fine, 22px) var(--graph-cell-fine, 22px),
+      var(--graph-cell-bold, 110px) var(--graph-cell-bold, 110px),
+      var(--graph-cell-bold, 110px) var(--graph-cell-bold, 110px);
+    opacity: 0.55;
+  }
+
+  [data-theme='dark'] .grid-overlay {
+    opacity: 0.4;
   }
 
   .paper-noise {

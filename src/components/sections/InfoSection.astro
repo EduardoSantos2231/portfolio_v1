@@ -24,13 +24,14 @@ export interface Props {
 const { fields, contacts, closingQuote } = Astro.props;
 ---
 
-<section id="info" class="info" aria-label="Informacoes">
-  <header class="info__header">
+<section id="info" class="info" aria-label="Informacoes" data-i18n-aria="info.arialabel">
+  <header class="info__header reveal" style="--settle-rotate:0deg;--reveal-origin:0% 50%;">
     <SectionTitle label="INFO" prefix="slash" i18nKey="info.title" voice="serif" size="headline" />
   </header>
 
   <div class="info__cards">
-    <div class="info__card info__card--about">
+    <span class="collage-tape info__cards-tape" aria-hidden="true"></span>
+    <div class="info__card info__card--about hard-shadow reveal" style="--settle-rotate:-0.9deg;--reveal-delay:60ms;--reveal-origin:20% 0%;">
       <span class="info__card-label">
         <Text voice="mono" size="small" color="secondary" as="span">
           <span data-i18n="about.cardLabel">FICHA TECNICA</span>
@@ -52,7 +53,7 @@ const { fields, contacts, closingQuote } = Astro.props;
       </div>
     </div>
 
-    <div class="info__card info__card--contact">
+    <div class="info__card info__card--contact hard-shadow reveal" style="--settle-rotate:0.8deg;--reveal-delay:200ms;--reveal-origin:80% 0%;">
       <span class="info__card-label">
         <Text voice="mono" size="small" color="secondary" as="span">
           <span data-i18n="contact.cardLabel">CONTATO</span>
@@ -137,10 +138,17 @@ const { fields, contacts, closingQuote } = Astro.props;
   .info__cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-border-width);
+    gap: var(--space-gap-section);
     min-height: 60vh;
     position: relative;
     transform: rotate(0.1deg);
+  }
+
+  .info__cards-tape {
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 120px;
   }
 
   .info__cards::before {
@@ -182,6 +190,8 @@ const { fields, contacts, closingQuote } = Astro.props;
     flex-direction: column;
     justify-content: flex-start;
     border: var(--space-border-width) solid var(--color-border-primary);
+    /* Superficie de papel liso: recorte que se destaca do fundo quadriculado. */
+    background-color: var(--color-surface-page);
   }
 
   .info__card::before {
