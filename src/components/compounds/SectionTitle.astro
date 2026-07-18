@@ -48,6 +48,13 @@ const { label, prefix = 'slash', i18nKey, voice = 'grotesk', size = 'headline' }
     font-family: var(--type-voice-serif);
     font-weight: var(--type-weight-serif-bold);
     letter-spacing: var(--type-tracking-tight);
+    font-style: italic;
+  }
+
+  .section-title[data-voice='serif'] .section-title__label::first-letter {
+    font-style: normal;
+    font-family: var(--type-voice-grotesk);
+    letter-spacing: var(--type-tracking-monumental);
   }
 
   .section-title[data-size='display'] .section-title__label {

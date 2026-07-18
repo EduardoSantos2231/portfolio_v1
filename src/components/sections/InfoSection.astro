@@ -110,6 +110,7 @@ const { fields, contacts, closingQuote } = Astro.props;
     min-height: 60vh;
     position: relative;
     border: var(--space-border-width) solid var(--color-border-primary);
+    transform: rotate(0.1deg);
   }
 
   .info__cards::before {
@@ -148,6 +149,7 @@ const { fields, contacts, closingQuote } = Astro.props;
 
   .info__card--about {
     background-color: var(--color-surface-page);
+    transform: rotate(-0.1deg);
   }
 
   .info__card--about::after {
@@ -166,6 +168,24 @@ const { fields, contacts, closingQuote } = Astro.props;
 
   .info__card--contact {
     background-color: var(--color-surface-container);
+    transform: rotate(0.15deg);
+  }
+
+  .info__card--contact::before {
+    content: 'VERIFIED';
+    position: absolute;
+    bottom: var(--space-gap-paragraph);
+    right: var(--space-gap-paragraph);
+    font-family: var(--type-voice-mono);
+    font-size: var(--type-size-micro);
+    color: var(--color-accent-stamp);
+    letter-spacing: var(--type-tracking-navigation);
+    opacity: 0.5;
+    transform: rotate(-5deg);
+    z-index: 2;
+    pointer-events: none;
+    border: 1px solid currentColor;
+    padding: 2px var(--space-gap-inline);
   }
 
   .info__card--contact::after {

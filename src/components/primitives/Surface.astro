@@ -28,6 +28,11 @@ const {
     position: relative;
     background-color: var(--color-surface-container);
     border: var(--space-border-width) solid var(--color-border-primary);
+    transform: rotate(-0.15deg);
+    clip-path: polygon(
+      2px 0, 98% 1px, 100% 4px, 100% 97%,
+      calc(100% - 3px) 100%, 4px 100%, 0 98%, 0 3px
+    );
   }
 
   .surface--inverse {
@@ -41,7 +46,7 @@ const {
     z-index: 2;
     pointer-events: none;
     background: var(--color-accent-stamp);
-    opacity: 0.45;
+    opacity: 0.4;
   }
 
   .surface__tape-tl {
