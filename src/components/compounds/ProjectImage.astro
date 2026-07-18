@@ -10,6 +10,7 @@ export interface Props {
 }
 
 const { src, alt, caption, priority = false } = Astro.props;
+const resolvedSrc = src.startsWith('/') ? import.meta.env.BASE_URL + '/' + src.slice(1) : src;
 ---
 
 <figure class="project-image-figure">
@@ -20,7 +21,7 @@ const { src, alt, caption, priority = false } = Astro.props;
     <CropMark position="bottom-left" />
     <CropMark position="bottom-right" />
     <Image
-      src={src}
+      src={resolvedSrc}
       alt={alt}
       treatment="blueprint"
       ratio="1:1"
