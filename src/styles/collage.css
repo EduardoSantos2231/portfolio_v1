@@ -1,0 +1,198 @@
+/* ===================================================================
+ * CONCRETO, MENTE E TROPICOS
+ * collage.css — Textura de papel quadriculado, colagem e animacoes
+ *
+ * Utilidades globais (nao-scoped) usadas atraves de componentes Astro:
+ *   .graph-paper       textura de caderno milimetrado
+ *   .reveal            animacao "recorte sendo colado" no scroll
+ *   .hard-shadow       sombra solida de papel sobreposto
+ *   .collage-tape      fita adesiva conectora
+ * =================================================================== */
+
+:root {
+  /* Celula fina do papel quadriculado (milimetrado). */
+  --graph-cell-fine: 22px;
+  /* Celula grossa (quadrado maior do caderno). */
+  --graph-cell-bold: 110px;
+  /* Intensidade da grade — "bem forte/caotico". */
+  --graph-line-opacity: 0.16;
+  --graph-bold-opacity: 0.28;
+}
+
+[data-theme='dark'] {
+  --graph-line-opacity: 0.10;
+  --graph-bold-opacity: 0.18;
+}
+
+/* -------------------------------------------------------------------
+ * Papel quadriculado — aplicado dentro de cards/superficies.
+ * Duas grades sobrepostas: fina + grossa, como caderno de desenho.
+ * ----------------------------------------------------------------- */
+
+.graph-paper {
+  position: relative;
+  isolation: isolate;
+}
+
+.graph-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 0,
+      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 0,
+      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 0,
+      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 1.5px,
+      transparent 1.5px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 0,
+      color-mix(in srgb, var(--color-grid-line) 100%, transparent) 1.5px,
+      transparent 1.5px
+    );
+  background-size:
+    var(--graph-cell-fine) var(--graph-cell-fine),
+    var(--graph-cell-fine) var(--graph-cell-fine),
+    var(--graph-cell-bold) var(--graph-cell-bold),
+    var(--graph-cell-bold) var(--graph-cell-bold);
+  opacity: 1;
+  /* A opacidade real vem das cores; usamos mask leve nas bordas. */
+}
+
+/* Aplica as opacidades por camada via cores translucidas. */
+.graph-paper::before {
+  --_fine: color-mix(in srgb, var(--color-grid-line) calc(var(--graph-line-opacity) * 100%), transparent);
+  --_bold: color-mix(in srgb, var(--color-grid-line) calc(var(--graph-bold-opacity) * 100%), transparent);
+  background-image:
+    linear-gradient(to right, var(--_fine) 0, var(--_fine) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--_fine) 0, var(--_fine) 1px, transparent 1px),
+    linear-gradient(to right, var(--_bold) 0, var(--_bold) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, var(--_bold) 0, var(--_bold) 1.5px, transparent 1.5px);
+}
+
+/* Garante que o conteudo do card fique acima da grade. */
+.graph-paper > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* -------------------------------------------------------------------
+ * Sombra solida — sensacao de papel recortado sobreposto.
+ * ----------------------------------------------------------------- */
+
+.hard-shadow {
+  box-shadow:
+    var(--space-hard-shadow-offset) var(--space-hard-shadow-offset) 0 0
+      color-mix(in srgb, var(--color-border-primary) 85%, transparent);
+}
+
+.hard-shadow--sm {
+  box-shadow:
+    3px 3px 0 0 color-mix(in srgb, var(--color-border-primary) 80%, transparent);
+}
+
+.hard-shadow--red {
+  box-shadow:
+    var(--space-hard-shadow-offset) var(--space-hard-shadow-offset) 0 0
+      color-mix(in srgb, var(--color-accent-stamp) 55%, transparent);
+}
+
+/* -------------------------------------------------------------------
+ * Fita adesiva conectora — "cola" uma secao a outra.
+ * ----------------------------------------------------------------- */
+
+.collage-tape {
+  position: absolute;
+  width: 84px;
+  height: 26px;
+  background: color-mix(in srgb, var(--color-accent-stamp) 22%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--color-border-primary) 35%, transparent);
+  z-index: 5;
+  pointer-events: none;
+  transform: rotate(-4deg);
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.08);
+}
+
+.collage-tape::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 5px,
+    color-mix(in srgb, var(--color-border-primary) 12%, transparent) 5px,
+    color-mix(in srgb, var(--color-border-primary) 12%, transparent) 6px
+  );
+}
+
+/* -------------------------------------------------------------------
+ * Animacao "recorte sendo colado" (scroll reveal).
+ * Elemento entra deslocado + rotacionado, faz um leve overshoot e
+ * assenta na rotacao natural definida por --settle-rotate.
+ * ----------------------------------------------------------------- */
+
+.reveal {
+  --settle-rotate: 0deg;
+  opacity: 0;
+  transform: translateY(28px) rotate(calc(var(--settle-rotate) - 4deg)) scale(0.965);
+  transform-origin: var(--reveal-origin, 50% 0%);
+  will-change: transform, opacity;
+}
+
+.reveal.is-pasted {
+  animation: paste-in 620ms cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+}
+
+/* Estado final estatico — libera o hover para sobrescrever o transform. */
+.reveal.is-settled {
+  opacity: 1;
+  animation: none;
+  transform: translateY(0) rotate(var(--settle-rotate)) scale(1);
+}
+
+@keyframes paste-in {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) rotate(calc(var(--settle-rotate) - 4deg)) scale(0.965);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(-4px) rotate(calc(var(--settle-rotate) + 1.4deg)) scale(1.012);
+  }
+  78% {
+    transform: translateY(1px) rotate(calc(var(--settle-rotate) - 0.6deg)) scale(0.997);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--settle-rotate)) scale(1);
+  }
+}
+
+/* Escalonamento de filhos (cards, projetos) via --reveal-delay. */
+.reveal {
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

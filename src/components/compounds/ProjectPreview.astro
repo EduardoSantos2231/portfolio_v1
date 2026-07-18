@@ -19,7 +19,7 @@ export interface Props {
 const { project, isExpanded = false } = Astro.props;
 ---
 
-<li class={['project-preview', isExpanded ? 'project-preview--expanded' : ''].join(' ')}>
+<li class={['project-preview', 'reveal', isExpanded ? 'project-preview--expanded' : ''].join(' ')}>
   <span class="project-preview__tape" aria-hidden="true" />
 
   <ProjectImage
@@ -53,13 +53,30 @@ const { project, isExpanded = false } = Astro.props;
 
 <style>
   .project-preview {
+    --settle-rotate: -0.6deg;
     position: relative;
     padding: var(--space-gap-paragraph);
     border: var(--space-border-width) solid var(--color-border-primary);
     background-color: var(--color-surface-page);
     list-style: none;
     z-index: 0;
-    transform: rotate(-0.3deg);
+    box-shadow: 3px 3px 0 0 color-mix(in srgb, var(--color-border-primary) 55%, transparent);
+    transition:
+      transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 220ms ease;
+    /* Papel quadriculado dentro do recorte. */
+    --_g-fine: color-mix(in srgb, var(--color-grid-line) 14%, transparent);
+    --_g-bold: color-mix(in srgb, var(--color-grid-line) 26%, transparent);
+    background-image:
+      linear-gradient(to right, var(--_g-fine) 0, var(--_g-fine) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--_g-fine) 0, var(--_g-fine) 1px, transparent 1px),
+      linear-gradient(to right, var(--_g-bold) 0, var(--_g-bold) 1.5px, transparent 1.5px),
+      linear-gradient(to bottom, var(--_g-bold) 0, var(--_g-bold) 1.5px, transparent 1.5px);
+    background-size:
+      var(--graph-cell-fine, 22px) var(--graph-cell-fine, 22px),
+      var(--graph-cell-fine, 22px) var(--graph-cell-fine, 22px),
+      var(--graph-cell-bold, 110px) var(--graph-cell-bold, 110px),
+      var(--graph-cell-bold, 110px) var(--graph-cell-bold, 110px);
   }
 
   .project-preview::after {
@@ -73,19 +90,40 @@ const { project, isExpanded = false } = Astro.props;
     z-index: 0;
   }
 
+  /* Cascata de entrada por coluna. */
+  .project-preview:nth-child(3n + 1) {
+    --reveal-delay: 0ms;
+  }
+
+  .project-preview:nth-child(3n + 2) {
+    --reveal-delay: 90ms;
+  }
+
+  .project-preview:nth-child(3n + 3) {
+    --reveal-delay: 180ms;
+  }
+
+  .project-preview:nth-child(2n) {
+    --settle-rotate: 0.7deg;
+  }
+
   .project-preview:nth-child(3n) {
-    transform: rotate(0.4deg);
+    --settle-rotate: -1deg;
   }
 
   .project-preview:nth-child(5n) {
-    transform: rotate(-0.5deg);
+    --settle-rotate: 1.1deg;
     z-index: 1;
   }
 
-  .project-preview:hover {
-    z-index: 2;
-    transform: rotate(0deg) !important;
-    animation: glitch-border 150ms steps(1) 1;
+  /* Hover: o recorte se ajeita reto e "levanta" do papel. */
+  .project-preview:hover,
+  .project-preview:focus-within {
+    z-index: 3;
+    transform: translateY(-6px) rotate(0deg) scale(1.02);
+    box-shadow:
+      6px 8px 0 0 color-mix(in srgb, var(--color-border-primary) 80%, transparent),
+      0 10px 24px rgba(0, 0, 0, 0.14);
   }
 
   .project-preview__tape {
@@ -98,6 +136,13 @@ const { project, isExpanded = false } = Astro.props;
     z-index: 2;
     transform: rotate(-2deg);
     pointer-events: none;
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), width 220ms ease;
+  }
+
+  .project-preview:hover .project-preview__tape,
+  .project-preview:focus-within .project-preview__tape {
+    transform: rotate(-6deg) translateY(-2px);
+    width: 44px;
   }
 
   .project-preview:nth-child(2n) .project-preview__tape {
@@ -130,17 +175,15 @@ const { project, isExpanded = false } = Astro.props;
     grid-row: span 2;
   }
 
-  @keyframes glitch-border {
-    0%, 100% { transform: rotate(0deg) translate(0, 0); }
-    15% { transform: rotate(0deg) translate(2px, 0); }
-    35% { transform: rotate(0deg) translate(-2px, 0); }
-    55% { transform: rotate(0deg) translate(-1px, 1px); }
-    75% { transform: rotate(0deg) translate(1px, -1px); }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .project-preview:hover {
-      animation: none;
+    .project-preview,
+    .project-preview__tape {
+      transition: none;
+    }
+
+    .project-preview:hover,
+    .project-preview:focus-within {
+      transform: none;
     }
   }
 
