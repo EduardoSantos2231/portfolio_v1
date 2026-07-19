@@ -7,10 +7,12 @@
 }
 
 html {
+  -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
 body {
+  overflow-x: hidden;
   min-height: 100dvh;
   line-height: var(--type-leading-body);
   font-family: var(--type-voice-serif);

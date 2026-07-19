@@ -99,4 +99,10 @@ const { label, prefix = 'slash', i18nKey, voice = 'grotesk', size = 'headline' }
     z-index: 2;
     pointer-events: none;
   }
+
+  @media (width <= 520px) {
+    .section-title::before {
+      left: -40px;
+    }
+  }
 </style>

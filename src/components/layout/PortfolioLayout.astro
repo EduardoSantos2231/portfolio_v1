@@ -495,4 +495,11 @@ const { navLinks, footerMeta } = Astro.props;
     color: var(--color-text-secondary);
     letter-spacing: var(--type-tracking-navigation);
   }
+
+  @media (width <= 520px) {
+    .footer {
+      flex-direction: column;
+      padding: var(--space-gap-paragraph);
+    }
+  }
 </style>
